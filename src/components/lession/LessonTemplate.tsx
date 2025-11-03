@@ -390,6 +390,13 @@ const validateAutomatonEnhanced = (
 
         console.log("✅ Lição registrada com sucesso:", response.data);
 
+        // 🔔 Notificar Path_player que a fase terminou
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("faseConcluida"));
+          console.log("📢 Evento 'faseConcluida' disparado!");
+        }
+        
+
           // 🔓 NOVO: desbloquear próxima fase
           try {
             console.log("📡 Verificando desbloqueio de próxima fase...");
@@ -461,7 +468,7 @@ const validateAutomatonEnhanced = (
 
   const handleContinue = async () => {
     const timeTaken = Math.round((Date.now() - startTime) / 1000);
-    
+
     const currentQuestion: AnsweredQuestion = {
       questionId: lessonData.title.replace(/\s+/g, "_").toLowerCase(),
       isCorrect: !!isCorrect,
@@ -470,10 +477,10 @@ const validateAutomatonEnhanced = (
       tags: lessonData.tags || [],
       timeTaken,
     };
-  
+
     const updatedAnswers = [...answeredQuestions, currentQuestion];
     setAnsweredQuestions(updatedAnswers);
-  
+
     if (questionIndex + 1 === totalQuestions) {
       console.log("🔥 Última questão detectada — chamando handleLessonComplete()");
       await handleLessonComplete();
@@ -482,7 +489,7 @@ const validateAutomatonEnhanced = (
       onComplete();
     }
   };
-  
+
 
   if (showSummary) {
     const total = answeredQuestions.length || 1;

@@ -88,6 +88,62 @@ const Path_player: React.FC = () => {
     }
   }, [])
 
+  // 🔔 Ouvir evento global "faseConcluida" vindo do LessonTemplate
+useEffect(() => {
+  const handleFaseConcluida = async () => {
+    console.log("📩 Recebido evento de conclusão de fase!");
+
+    if (!userData) {
+      console.warn("⚠️ Usuário não carregado, ignorando desbloqueio.");
+      return;
+    }
+
+    try {
+      const nextPhase = userData.unlocked_phases.length + 1;
+      const updatedPhases = [...userData.unlocked_phases];
+
+      if (!updatedPhases.includes(String(nextPhase)) && nextPhase <= 5) {
+        updatedPhases.push(String(nextPhase));
+        console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
+
+        const res = await fetch(
+          `https://backend-lfaquest.onrender.com/api/users/${userData.id}/progress`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              unlocked_phases: JSON.stringify(updatedPhases),
+            }),
+          }
+        );
+
+        const data = await res.json();
+        if (res.ok) {
+          console.log(`✅ Fase ${nextPhase} liberada e salva com sucesso.`, data);
+          setUserData((prev: any) => ({
+            ...prev,
+            unlocked_phases: updatedPhases,
+          }));
+        } else {
+          console.error("❌ Erro ao atualizar progresso:", data);
+        }
+      } else {
+        console.log("ℹ️ Nenhuma nova fase a liberar (já desbloqueada).");
+      }
+    } catch (err) {
+      console.error("❌ Falha ao liberar fase:", err);
+    }
+  };
+
+  // Escutar evento global
+  window.addEventListener("faseConcluida", handleFaseConcluida);
+
+  return () => {
+    window.removeEventListener("faseConcluida", handleFaseConcluida);
+  };
+}, [userData]);
+
+
 
   const handleLogin = async () => {
     setLoginError("")
