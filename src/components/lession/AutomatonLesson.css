@@ -1,0 +1,391 @@
+/* ====== AUTOMATON LESSON STYLES ====== */
+
+/* ====== Botão de validar (AUTÔMATO) ====== */
+.automaton-simple-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-validar {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn-validar:hover {
+  background-color: #1976d2;
+}
+
+.validacao-resultado {
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 5px solid;
+}
+
+.validacao-resultado.valido {
+  background-color: #e8f5e8;
+  border-left-color: #4caf50;
+}
+
+.validacao-resultado.invalido {
+  background-color: #ffebee;
+  border-left-color: #f44336;
+}
+
+.validacao-resultado h4 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.validacao-detalhes {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.mensagem-validacao {
+  padding: 5px 0;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mensagem-validacao:last-child {
+  border-bottom: none;
+}
+
+/* ====== LADO DIREITO (AUTÔMATO) ====== */
+.lesson-right {
+  flex: 1;
+  padding: 3rem;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Container específico para o autômato */
+.automaton-container {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ====== ESTADOS (BOLAS) ====== */
+.estado {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  cursor: move;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  user-select: none;
+  touch-action: none;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Arial", sans-serif;
+  background: radial-gradient(circle at 30% 30%, #3b82f6, #1d4ed8);
+  border: 3px solid transparent;
+}
+
+.estado-nome {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+
+.estado.arrastando {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  transform: scale(1.05);
+  transition: transform 0.1s ease-out;
+  z-index: 10;
+}
+
+.estado.conectada {
+  box-shadow: 0 0 0 3px #10b981, 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.estado.selecionada {
+  box-shadow: 0 0 0 5px #f59e0b, 0 10px 20px rgba(0, 0, 0, 0.3);
+  animation: pulsar-selecao 1s infinite;
+  transform: scale(1.1);
+  z-index: 3;
+}
+
+.estado.inicial {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px #10b981, 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.estado.final {
+  border: 3px double #ef4444;
+  border-width: 4px;
+  box-shadow: 0 0 0 2px #ef4444, 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Marcadores para estado inicial e final */
+.marcador-inicial {
+  position: absolute;
+  top: -10px;
+  left: -15px;
+  font-size: 24px;
+  color: #10b981;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.marcador-final {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 16px;
+  color: #ef4444;
+  font-weight: bold;
+  background: rgba(239, 68, 68, 0.2);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes pulsar-selecao {
+  0% {
+    box-shadow: 0 0 0 3px #f59e0b, 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px #f59e0b, 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 3px #f59e0b, 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ====== CONEXÕES E SETAS ====== */
+.seta-conectavel {
+  pointer-events: visible;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seta-conectavel:hover line {
+  stroke-width: 5;
+  filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.5));
+}
+
+/* Estilos para autorreflexão */
+.seta-autorreflexao {
+  pointer-events: visible;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seta-autorreflexao:hover path {
+  stroke-width: 4;
+  filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.7));
+}
+
+/* ====== CARACTERES DAS CONEXÕES - CORRIGIDO ====== */
+.caractere-conexao {
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  paint-order: stroke;
+  stroke: white;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Cores específicas para diferentes tipos de conexão */
+.seta-conectavel .caractere-conexao {
+  fill: #ffffff;
+  stroke: #0f172a;
+}
+
+.seta-autorreflexao .caractere-conexao {
+  fill: #ffffff;
+  stroke: #0f172a;
+}
+
+/* Efeito hover nos caracteres */
+.caractere-conexao:hover {
+  fill: #fbbf24;
+  filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.8));
+}
+
+/* ====== CONTROLES SIMPLIFICADOS ====== */
+.automaton-simple-controls {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+}
+
+.btn-conectar,
+.btn-cancelar {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-conectar {
+  background: #10b981;
+}
+
+.btn-conectar:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.btn-cancelar {
+  background: #ef4444;
+}
+
+.btn-cancelar:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* ====== CONEXÕES SELECIONÁVEIS ====== */
+.seta-conectavel.selecionada line {
+  stroke: #3b82f6 !important;
+  stroke-width: 4 !important;
+  filter: drop-shadow(0 0 3px rgba(59, 130, 246, 0.7));
+}
+
+.seta-autorreflexao.selecionada path {
+  stroke: #8b5cf6 !important;
+  stroke-width: 4 !important;
+  filter: drop-shadow(0 0 3px rgba(139, 92, 246, 0.7));
+}
+
+.seta-conectavel.selecionada polygon {
+  fill: #3b82f6 !important;
+}
+
+.seta-conectavel.selecionada .caractere-conexao,
+.seta-autorreflexao.selecionada .caractere-conexao {
+  fill: #fbbf24;
+  stroke: #0f172a;
+  filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.8));
+}
+
+/* ====== MODAL DE EDIÇÃO ====== */
+.edicao-caractere-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #38bdf8;
+  z-index: 100;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  min-width: 250px;
+}
+
+.edicao-caractere-modal h4 {
+  margin: 0 0 15px 0;
+  color: #38bdf8;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.edicao-caractere {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.input-caractere {
+  width: 60px;
+  padding: 10px;
+  border: 1px solid #38bdf8;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.botoes-edicao {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-confirmar,
+.btn-cancelar-edicao {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  color: white;
+  font-weight: 600;
+  flex: 1;
+}
+
+.btn-confirmar {
+  background: #10b981;
+}
+
+.btn-confirmar:hover {
+  background: #059669;
+}
+
+.btn-cancelar-edicao {
+  background: #6b7280;
+}
+
+.btn-cancelar-edicao:hover {
+  background: #4b5563;
+}
+
+.dica-modal {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-align: center;
+  margin: 10px 0 0 0;
+  font-style: italic;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}

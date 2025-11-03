@@ -1,0 +1,81 @@
+.store-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #1a2332;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.store-main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+}
+
+.store-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.store-balance {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #94a3b8;
+}
+
+.store-section {
+  margin-bottom: 2rem;
+}
+
+.store-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.store-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.store-item {
+  background: #334155;
+  border: 1px solid #475569;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.store-item:hover {
+  transform: translateY(-3px);
+}
+
+.store-item.unlocked {
+  border-color: #10b981;
+}
+
+.store-item.locked {
+  opacity: 0.6;
+}
+
+.store-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.store-item p {
+  margin: 0.5rem 0;
+  font-weight: bold;
+}
+
+.store-item span {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}

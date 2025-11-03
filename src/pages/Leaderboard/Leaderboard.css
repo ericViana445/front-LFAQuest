@@ -1,0 +1,80 @@
+.leaderboard-layout {
+  display: flex;
+  height: 100vh;
+  background: #1a2332;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Main Content */
+.leaderboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.leaderboard-header {
+  background: #4285f4;
+  padding: 20px 24px;
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+
+.leaderboard-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.leaderboard-header p {
+  margin: 4px 0 0;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* Lista de jogadores */
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #2a3441;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid #3a4553;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.leaderboard-item.me {
+  background: #22c55e;
+  border: 1px solid #16a34a;
+  font-weight: 700;
+}
+
+.position {
+  width: 40px;
+  font-weight: bold;
+  color: #9ca3af;
+}
+
+.avatar {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.name {
+  flex: 1;
+}
+
+.xp {
+  font-weight: 600;
+  color: #facc15;
+}
