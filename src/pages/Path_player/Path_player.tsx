@@ -259,70 +259,101 @@ const Path_player: React.FC = () => {
 
 
   const handleLessonComplete = async (isCorrect: boolean) => {
+    console.log("handelando fim de lição"); // 👀 debug inicial
+    
     const updatedAnswers = [...phaseAnswers, isCorrect];
     setPhaseAnswers(updatedAnswers);
-  
-    // Detecta se estamos em uma lição de autômato
+    
     const isAutomatonLesson = currentLessonType === "automaton";
-  
-    // Se for automato, sempre tratamos como última questão
+    console.log("é automato?", isAutomatonLesson);
+    
+    // Se for automato, termina ali mesmo
     if (isAutomatonLesson) {
       console.log("⚙️ Finalizando lição de autômato (sem próxima questão).");
       setIsLessonActive(false);
     
-      if (!userData) return;
+      if (!userData) {
+        console.warn("🚫 Nenhum usuário logado, cancelando progressão.");
+        return;
+      }
     
       try {
         console.log("📡 Enviando dados para verificar conquistas (automaton lesson).");
         const res = await fetch(`https://backend-lfaquest.onrender.com/api/users/${userData.id}/checkAchievements`);
         const data = await res.json();
-      
-        if (data.newAchievements && data.newAchievements.length > 0) {
-          setNewAchievements(data.newAchievements);
-          setShowAchievementsPopup(true);
-          console.log("🏅 Novas conquistas desbloqueadas:", data.newAchievements);
-        } else {
-          console.log("Nenhuma nova conquista encontrada.");
-        }
+        console.log("🔙 Resposta conquistas:", data);
       } catch (err) {
         console.error("Erro ao verificar conquistas:", err);
       }
     
-      // Resetar o tipo de lição para evitar softlocks
       setCurrentLessonType("normal");
       return;
     }
   
-    // 🔸 Caso contrário, segue o fluxo normal das lições de fase
     const currentPhaseLessons = lessons[currentPhase - 1];
     const isLastQuestion = currentQuestionIndex >= currentPhaseLessons.length - 1;
+    console.log("é a ultima pergunta?", isLastQuestion);
   
     if (isLastQuestion) {
-      console.log("🏁 Última questão da fase alcançada!");
+      console.log("📤 handleLessonComplete()");
+      console.log("🚀 Enviando dados de finalização da lição...");
       setIsLessonActive(false);
     
-      if (!userData) return;
+      if (!userData) {
+        console.warn("🚫 Nenhum usuário logado — não dá pra salvar progresso.");
+        return;
+      }
     
       try {
         console.log("📡 Enviando dados para verificar conquistas (fase normal).");
         const res = await fetch(`https://backend-lfaquest.onrender.com/api/users/${userData.id}/checkAchievements`);
         const data = await res.json();
-      
-        if (data.newAchievements && data.newAchievements.length > 0) {
-          setNewAchievements(data.newAchievements);
-          setShowAchievementsPopup(true);
-          console.log("🏅 Novas conquistas desbloqueadas:", data.newAchievements);
-        } else {
-          console.log("Nenhuma nova conquista encontrada.");
-        }
+        console.log("🔙 Resposta conquistas:", data);
       } catch (err) {
         console.error("Erro ao verificar conquistas:", err);
+      }
+    
+      // 🔓 Progressão de fase
+      try {
+        const nextPhase = currentPhase + 1;
+        const alreadyUnlocked = userData.unlocked_phases || ["1"];
+        console.log("🧩 Fases já desbloqueadas:", alreadyUnlocked, "Tentando liberar:", nextPhase);
+      
+        if (!alreadyUnlocked.includes(String(nextPhase)) && nextPhase <= 5) {
+          const updatedPhases = [...alreadyUnlocked, String(nextPhase)];
+          console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
+        
+          const response = await fetch(`https://backend-lfaquest.onrender.com/api/users/${userData.id}/progress`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ unlocked_phases: JSON.stringify(updatedPhases) }),
+          });
+        
+          const result = await response.json();
+          console.log("📬 Resposta do backend (update progress):", result);
+        
+          if (response.ok) {
+            setUserData((prev: any) => ({
+              ...prev,
+              unlocked_phases: updatedPhases,
+            }));
+            console.log(`✅ Fase ${nextPhase} liberada e salva com sucesso.`);
+          } else {
+            console.error("❌ Falha ao atualizar progresso:", result);
+          }
+        } else {
+          console.log("ℹ️ Nenhuma nova fase a liberar ou já desbloqueada.");
+        }
+      } catch (err) {
+        console.error("❌ Erro ao salvar progresso de fases:", err);
       }
     } else {
       console.log("➡️ Indo para a próxima questão.");
       setCurrentQuestionIndex((prev) => prev + 1);
     }
   };
+  
+
 
 
   const handlePhaseSummaryContinue = () => {
