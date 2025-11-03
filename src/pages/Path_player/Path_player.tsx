@@ -472,7 +472,7 @@ const Path_player: React.FC = () => {
                     <span>🧠 Módulo 3 — Lema do Bombeamento</span>
                   </div>
                 )}
-
+          
                 {/* 🔸 Fase */}
                 <div
                   className={`path-node ${
@@ -490,11 +490,15 @@ const Path_player: React.FC = () => {
                   <div className="node-label">{phase.title}</div>
                 </div>
                 
-                {index < phaseData.length - 1 && <div className="path-connector"></div>}
+                {/* 🔸 Conector entre fases, exceto entre módulos */}
+                {index < phaseData.length - 1 &&
+                  phase.phase !== 2 && // ❌ remove linha entre módulo 1 e 2
+                  phase.phase !== 4 && // ❌ remove linha entre módulo 2 e 3
+                  <div className="path-connector"></div>}
               </React.Fragment>
             ))}
-
-            {/* 🔸 Prática final */}
+          
+            {/* 🔹 Prática final */}
             <div
               className="path-node upcoming"
               onClick={() => {
@@ -522,6 +526,7 @@ const Path_player: React.FC = () => {
               <div className="node-subtitle">Autômatos</div>
             </div>
           </div>
+
 
         </div>
       </div>
