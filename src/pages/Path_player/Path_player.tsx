@@ -88,14 +88,14 @@ const Path_player: React.FC = () => {
     }
   }, [])
 
-  // 🔔 Ouvir evento global "faseConcluida" vindo do LessonTemplate
+  // 🔔 Ouvir evento global "faseConcluida" vindo do LessonTemplat
   // 🔔 Ouvir evento global "faseConcluida" vindo do LessonTemplate
   useEffect(() => {
     const handleFaseConcluida = () => {
       console.log("📢 Evento 'faseConcluida' detectado pelo Path_player!");
       unlockNextPhase(); // ← chama a função de desbloqueio
     };
-  
+
     window.addEventListener("faseConcluida", handleFaseConcluida);
     return () => {
       window.removeEventListener("faseConcluida", handleFaseConcluida);

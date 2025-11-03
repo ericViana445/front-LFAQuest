@@ -399,49 +399,50 @@ const validateAutomatonEnhanced = (
 
 
           // 🔓 NOVO: desbloquear próxima fase
+          // 🔓 Desbloquear próxima fase diretamente (sem depender do Path_player)
           try {
-            console.log("📡 Verificando desbloqueio de próxima fase...");
-          
-            const userRes = await fetch(
-              `https://backend-lfaquest.onrender.com/api/users/${user.id}`
-            );
-            const userData = await userRes.json();
-            const unlocked = userData.unlocked_phases
-              ? JSON.parse(userData.unlocked_phases)
-              : ["1"];
-          
-            // calcula a próxima fase (com base na fase atual da jornada)
-            const nextPhase = unlocked.length + 1;
-          
-            if (!unlocked.includes(String(nextPhase)) && nextPhase <= 5) {
-              const updatedPhases = [...unlocked, String(nextPhase)];
-              console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            if (user?.id) {
+              const resUser = await fetch(`https://backend-lfaquest.onrender.com/api/users/${user.id}`);
+              const freshUserData = await resUser.json();
+              const currentPhases = freshUserData.unlocked_phases
+                ? JSON.parse(freshUserData.unlocked_phases)
+                : ["1"];
+              const nextPhase = currentPhases.length + 1;
             
-              const progressRes = await fetch(
-                `https://backend-lfaquest.onrender.com/api/users/${user.id}/progress`,
-                {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    unlocked_phases: JSON.stringify(updatedPhases),
-                  }),
+              if (!currentPhases.includes(String(nextPhase)) && nextPhase <= 5) {
+                const updatedPhases = [...currentPhases, String(nextPhase)];
+                console.log(`🔓 Liberando nova fase diretamente no LessonTemplate: ${nextPhase}`, updatedPhases);
+              
+                const res = await fetch(
+                  `https://backend-lfaquest.onrender.com/api/users/${user.id}/progress`,
+                  {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      unlocked_phases: JSON.stringify(updatedPhases),
+                    }),
+                  }
+                );
+              
+                const data = await res.json();
+                if (res.ok) {
+                  console.log(`✅ Fase ${nextPhase} liberada com sucesso via LessonTemplate.`, data);
+                
+                  // Atualiza localStorage
+                  const updatedUser = { ...user, unlocked_phases: updatedPhases };
+                  localStorage.setItem("user", JSON.stringify(updatedUser));
+                } else {
+                  console.error("❌ Erro ao atualizar progresso via LessonTemplate:", data);
                 }
-              );
-            
-              const progressData = await progressRes.json();
-              console.log("📬 Resposta do backend (update progress):", progressData);
-            
-              if (progressRes.ok) {
-                console.log(`✅ Fase ${nextPhase} liberada e salva com sucesso.`);
               } else {
-                console.error("❌ Falha ao atualizar progresso:", progressData);
+                console.log("ℹ️ Nenhuma nova fase a liberar (já desbloqueada).");
               }
-            } else {
-              console.log("ℹ️ Nenhuma nova fase a liberar (já desbloqueada).");
             }
           } catch (err) {
-            console.error("❌ Erro ao salvar progresso de fases:", err);
+            console.error("❌ Falha ao liberar fase no LessonTemplate:", err);
           }
+          
 
           // exibir sumário normalmente
           setShowSummary(true);
