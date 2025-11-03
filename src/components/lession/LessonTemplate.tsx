@@ -394,8 +394,9 @@ const validateAutomatonEnhanced = (
         if (typeof window !== "undefined") {
           window.dispatchEvent(new CustomEvent("faseConcluida"));
           console.log("📢 Evento 'faseConcluida' disparado!");
+          
         }
-        
+
 
           // 🔓 NOVO: desbloquear próxima fase
           try {

@@ -89,70 +89,78 @@ const Path_player: React.FC = () => {
   }, [])
 
   // 🔔 Ouvir evento global "faseConcluida" vindo do LessonTemplate
+  // 🔔 Ouvir evento global "faseConcluida" vindo do LessonTemplate
   useEffect(() => {
-    const handleFaseConcluida = async () => {
-      console.log("📩 Recebido evento de conclusão de fase!");
-    
-      const localUser = JSON.parse(localStorage.getItem("user") || "{}");
-      if (!localUser?.id) {
-        console.warn("⚠️ Usuário não encontrado no localStorage, ignorando desbloqueio.");
-        return;
-      }
-    
-      try {
-        // Buscar o estado atualizado do usuário
-        const resUser = await fetch(`https://backend-lfaquest.onrender.com/api/users/${localUser.id}`);
-        const freshUserData = await resUser.json();
-        const currentPhases = freshUserData.unlocked_phases ? JSON.parse(freshUserData.unlocked_phases) : ["1"];
-        console.log("📘 Fases atuais no backend:", currentPhases);
-      
-        const nextPhase = currentPhases.length + 1;
-        const updatedPhases = [...currentPhases];
-      
-        if (!updatedPhases.includes(String(nextPhase)) && nextPhase <= 5) {
-          updatedPhases.push(String(nextPhase));
-          console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
-        
-          const res = await fetch(
-            `https://backend-lfaquest.onrender.com/api/users/${localUser.id}/progress`,
-            {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                unlocked_phases: JSON.stringify(updatedPhases),
-              }),
-            }
-          );
-        
-          const data = await res.json();
-          if (res.ok) {
-            console.log(`✅ Fase ${nextPhase} liberada e salva com sucesso.`, data);
-            // Atualiza localStorage
-            const updatedUser = { ...localUser, unlocked_phases: updatedPhases };
-            localStorage.setItem("user", JSON.stringify(updatedUser));
-            // Atualiza estado do React
-            setUserData((prev: any) => ({
-              ...prev,
-              unlocked_phases: updatedPhases,
-            }));
-          } else {
-            console.error("❌ Erro ao atualizar progresso:", data);
-          }
-        } else {
-          console.log("ℹ️ Nenhuma nova fase a liberar (já desbloqueada).");
-        }
-      } catch (err) {
-        console.error("❌ Falha ao liberar fase:", err);
-      }
+    const handleFaseConcluida = () => {
+      console.log("📢 Evento 'faseConcluida' detectado pelo Path_player!");
+      unlockNextPhase(); // ← chama a função de desbloqueio
     };
   
-    // Sempre escuta o evento, independentemente de userData
     window.addEventListener("faseConcluida", handleFaseConcluida);
-  
     return () => {
       window.removeEventListener("faseConcluida", handleFaseConcluida);
     };
-  }, []); // <-- remove [userData]
+  }, []);
+
+    // 🔓 Função dedicada para desbloquear próxima fase
+  const unlockNextPhase = async () => {
+    console.log("📩 Chamando unlockNextPhase()...");
+
+    const localUser = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!localUser?.id) {
+      console.warn("⚠️ Usuário não encontrado no localStorage, ignorando desbloqueio.");
+      return;
+    }
+
+    try {
+      // Buscar o estado atual do usuário
+      const resUser = await fetch(`https://backend-lfaquest.onrender.com/api/users/${localUser.id}`);
+      const freshUserData = await resUser.json();
+      const currentPhases = freshUserData.unlocked_phases
+        ? JSON.parse(freshUserData.unlocked_phases)
+        : ["1"];
+
+      console.log("📘 Fases atuais no backend:", currentPhases);
+
+      const nextPhase = currentPhases.length + 1;
+      const updatedPhases = [...currentPhases];
+
+      if (!updatedPhases.includes(String(nextPhase)) && nextPhase <= 5) {
+        updatedPhases.push(String(nextPhase));
+        console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
+
+        const res = await fetch(
+          `https://backend-lfaquest.onrender.com/api/users/${localUser.id}/progress`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              unlocked_phases: JSON.stringify(updatedPhases),
+            }),
+          }
+        );
+
+        const data = await res.json();
+        if (res.ok) {
+          console.log(`✅ Fase ${nextPhase} liberada e salva com sucesso.`, data);
+
+          // Atualiza localStorage e estado global
+          const updatedUser = { ...localUser, unlocked_phases: updatedPhases };
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+          setUserData((prev: any) => ({
+            ...prev,
+            unlocked_phases: updatedPhases,
+          }));
+        } else {
+          console.error("❌ Erro ao atualizar progresso:", data);
+        }
+      } else {
+        console.log("ℹ️ Nenhuma nova fase a liberar (já desbloqueada).");
+      }
+    } catch (err) {
+      console.error("❌ Falha ao liberar fase:", err);
+    }
+  };
 
 
 
@@ -360,7 +368,7 @@ const Path_player: React.FC = () => {
 
     const currentPhaseLessons = lessons[currentPhase - 1];
     const isLastQuestion = currentQuestionIndex >= currentPhaseLessons.length - 1;
-    console.log("é a ultima pergunta?", isLastQuestion);
+    console.log("é a ultima ", isLastQuestion);
 
     if (isLastQuestion) {
       console.log("📤 handleLessonComplete()");
