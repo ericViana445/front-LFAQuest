@@ -415,15 +415,16 @@ const validateAutomatonEnhanced = (
                 console.log(`🔓 Liberando nova fase diretamente no LessonTemplate: ${nextPhase}`, updatedPhases);
               
                 const res = await fetch(
-                  `https://backend-lfaquest.onrender.com/api/users/${user.id}/progress`,
+                  `https://backend-lfaquest.onrender.com/api/users/${user.id}/unlockedPhases`,
                   {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                      unlocked_phases: JSON.stringify(updatedPhases),
+                      unlocked_phases: updatedPhases, // ✅ envia array puro
                     }),
                   }
                 );
+                
               
                 const data = await res.json();
                 if (res.ok) {

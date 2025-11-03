@@ -135,10 +135,11 @@ const Path_player: React.FC = () => {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              unlocked_phases: JSON.stringify(updatedPhases),
+              unlocked_phases: updatedPhases, // ✅ array puro
             }),
           }
         );
+        
 
         const data = await res.json();
         if (res.ok) {
@@ -399,11 +400,15 @@ const Path_player: React.FC = () => {
           const updatedPhases = [...alreadyUnlocked, String(nextPhase)];
           console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
 
-          const response = await fetch(`https://backend-lfaquest.onrender.com/api/users/${userData.id}/progress`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ unlocked_phases: JSON.stringify(updatedPhases) }),
-          });
+          const response = await fetch(
+            `https://backend-lfaquest.onrender.com/api/users/${userData.id}/unlockedPhases`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ unlocked_phases: updatedPhases }), // ✅ envia array puro
+            }
+          );
+
 
           const result = await response.json();
           console.log("📬 Resposta do backend (update progress):", result);
