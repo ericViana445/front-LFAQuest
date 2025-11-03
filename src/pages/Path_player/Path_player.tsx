@@ -31,7 +31,7 @@ const Path_player: React.FC = () => {
   const [selectedTask, setSelectedTask] = useState<any>(null)
   const [isLessonActive, setIsLessonActive] = useState(false)
   const [currentLessonType, setCurrentLessonType] = useState<"normal" | "automaton">("normal")
-  const [newAchievements, setNewAchievements] = useState<any[]>([])
+  const [newAchievements] = useState<any[]>([])
   const [showAchievementsPopup, setShowAchievementsPopup] = useState(false)
   const [currentPhase, setCurrentPhase] = useState(1) // 1 ou 2
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0) // 0-4 para as 5 questões
