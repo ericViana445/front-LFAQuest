@@ -353,6 +353,38 @@
   color: #cbd5e1;
 }
 
-/* =========================
-   MÓDULOS DE APRENDIZAGEM
+   /* =========================
+   DIVISORES DE MÓDULOS
    ========================= */
+.module-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 40px 0 20px;
+  position: relative;
+}
+
+.module-divider::before,
+.module-divider::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+}
+
+.module-divider span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #1a2332;
+  padding: 0 12px;
+  border-radius: 8px;
+}

@@ -454,69 +454,47 @@ const Path_player: React.FC = () => {
           <div className="path-title">Jornada de Autômatos Finitos</div>
 
           <div className="path-nodes">
-
-            {/* 🔹 MÓDULO 1: Autômatos e Gramáticas Regulares */}
-            <div className="module-block">
-              <h2 className="module-title">Módulo 1 — Autômatos e Gramáticas Regulares</h2>
-              {phaseData
-                .filter((p) => p.phase === 1 || p.phase === 2)
-                .map((phase) => (
-                  <React.Fragment key={phase.phase}>
-                    <div
-                      className={`path-node ${currentPhase === phase.phase ? "active" : phase.phase < currentPhase ? "completed" : "upcoming"}`}
-                      onClick={() => handleNodeClick(phase.phase)}
-                    >
-                      <div className="node-circle">
-                        <span className="node-icon">{phase.icon}</span>
-                      </div>
-                      <div className="node-label">{phase.title}</div>
-                    </div>
-                    {phase.phase === 1 && <div className="path-connector"></div>}
-                  </React.Fragment>
-                ))}
-            </div>
-              
-            {/* 🔹 MÓDULO 2: Expressões Regulares */}
-            <div className="module-block">
-              <h2 className="module-title">Módulo 2 — Expressões Regulares</h2>
-              {phaseData
-                .filter((p) => p.phase === 3 || p.phase === 4)
-                .map((phase) => (
-                  <React.Fragment key={phase.phase}>
-                    <div
-                      className={`path-node ${currentPhase === phase.phase ? "active" : phase.phase < currentPhase ? "completed" : "upcoming"}`}
-                      onClick={() => handleNodeClick(phase.phase)}
-                    >
-                      <div className="node-circle">
-                        <span className="node-icon">{phase.icon}</span>
-                      </div>
-                      <div className="node-label">{phase.title}</div>
-                    </div>
-                    {phase.phase === 3 && <div className="path-connector"></div>}
-                  </React.Fragment>
-                ))}
-            </div>
-              
-            {/* 🔹 MÓDULO 3: Lema do Bombeamento */}
-            <div className="module-block">
-              <h2 className="module-title">Módulo 3 — Lema do Bombeamento</h2>
-              {phaseData
-                .filter((p) => p.phase === 5)
-                .map((phase) => (
-                  <div
-                    key={phase.phase}
-                    className={`path-node ${currentPhase === phase.phase ? "active" : phase.phase < currentPhase ? "completed" : "upcoming"}`}
-                    onClick={() => handleNodeClick(phase.phase)}
-                  >
-                    <div className="node-circle">
-                      <span className="node-icon">{phase.icon}</span>
-                    </div>
-                    <div className="node-label">{phase.title}</div>
+            {phaseData.map((phase, index) => (
+              <React.Fragment key={phase.phase}>
+                {/* 🔹 Divisores de módulos */}
+                {phase.phase === 1 && (
+                  <div className="module-divider">
+                    <span>🧩 Módulo 1 — Autômatos e Gramáticas Regulares</span>
                   </div>
-                ))}
-            </div>
-              
-            {/* 🔹 Prática final */}
+                )}
+                {phase.phase === 3 && (
+                  <div className="module-divider">
+                    <span>🔍 Módulo 2 — Expressões Regulares</span>
+                  </div>
+                )}
+                {phase.phase === 5 && (
+                  <div className="module-divider">
+                    <span>🧠 Módulo 3 — Lema do Bombeamento</span>
+                  </div>
+                )}
+
+                {/* 🔸 Fase */}
+                <div
+                  className={`path-node ${
+                    currentPhase === phase.phase
+                      ? "active"
+                      : index < currentPhase - 1
+                      ? "completed"
+                      : "upcoming"
+                  }`}
+                  onClick={() => handleNodeClick(phase.phase)}
+                >
+                  <div className="node-circle">
+                    <span className="node-icon">{phase.icon}</span>
+                  </div>
+                  <div className="node-label">{phase.title}</div>
+                </div>
+                
+                {index < phaseData.length - 1 && <div className="path-connector"></div>}
+              </React.Fragment>
+            ))}
+
+            {/* 🔸 Prática final */}
             <div
               className="path-node upcoming"
               onClick={() => {
@@ -543,8 +521,8 @@ const Path_player: React.FC = () => {
               <div className="node-label">Prática Interativa</div>
               <div className="node-subtitle">Autômatos</div>
             </div>
-            
           </div>
+
         </div>
       </div>
 
