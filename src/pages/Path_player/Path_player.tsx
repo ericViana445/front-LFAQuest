@@ -77,19 +77,17 @@ const Path_player: React.FC = () => {
       const userId = decoded.id
 
       fetch(`https://backend-lfaquest.onrender.com/api/users/${userId}`)
-        .then((res) => {
-          if (!res.ok) throw new Error("Erro ao buscar usuário")
-          return res.json()
-        })
+        .then((res) => res.json())
         .then((data) => {
-          setUserData(data)
-          console.log("✅ Dados do usuário carregados:", data)
+          const parsedUnlocked = data.unlocked_phases ? JSON.parse(data.unlocked_phases) : ["1"]
+          setUserData({ ...data, unlocked_phases: parsedUnlocked })
+          console.log("✅ Fases desbloqueadas:", parsedUnlocked)
         })
-        .catch((err) => console.error("Erro ao carregar usuário:", err))
     } catch (error) {
       console.error("Token inválido:", error)
     }
   }, [])
+
 
   const handleLogin = async () => {
     setLoginError("")
@@ -454,49 +452,55 @@ const Path_player: React.FC = () => {
           <div className="path-title">Jornada de Autômatos Finitos</div>
 
           <div className="path-nodes">
-            {phaseData.map((phase, index) => (
-              <React.Fragment key={phase.phase}>
-                {/* 🔹 Divisores de módulos */}
-                {phase.phase === 1 && (
-                  <div className="module-divider">
-                    <span>🧩 Módulo 1 — Autômatos e Gramáticas Regulares</span>
-                  </div>
-                )}
-                {phase.phase === 3 && (
-                  <div className="module-divider">
-                    <span>🔍 Módulo 2 — Expressões Regulares</span>
-                  </div>
-                )}
-                {phase.phase === 5 && (
-                  <div className="module-divider">
-                    <span>🧠 Módulo 3 — Lema do Bombeamento</span>
-                  </div>
-                )}
+            {phaseData.map((phase: any, index: number) => {
+              // ✅ Correto: aqui é um bloco de função, então posso usar const
+              const isUnlocked = userData?.unlocked_phases?.includes(String(phase.phase))
+            
+              return (
+                <React.Fragment key={phase.phase}>
+                  {/* 🔹 Divisores de módulos */}
+                  {phase.phase === 1 && (
+                    <div className="module-divider">
+                      <span>🧩 Módulo 1 — Autômatos e Gramáticas Regulares</span>
+                    </div>
+                  )}
+                  {phase.phase === 3 && (
+                    <div className="module-divider">
+                      <span>🔍 Módulo 2 — Expressões Regulares</span>
+                    </div>
+                  )}
+                  {phase.phase === 5 && (
+                    <div className="module-divider">
+                      <span>🧠 Módulo 3 — Lema do Bombeamento</span>
+                    </div>
+                  )}
           
-                {/* 🔸 Fase */}
-                <div
-                  className={`path-node ${
-                    currentPhase === phase.phase
-                      ? "active"
-                      : index < currentPhase - 1
-                      ? "completed"
-                      : "upcoming"
-                  }`}
-                  onClick={() => handleNodeClick(phase.phase)}
-                >
-                  <div className="node-circle">
-                    <span className="node-icon">{phase.icon}</span>
+                  {/* 🔸 Fase */}
+                  <div
+                    className={`path-node ${
+                      !isUnlocked
+                        ? "locked"
+                        : currentPhase === phase.phase
+                        ? "active"
+                        : "completed"
+                    }`}
+                    onClick={() => isUnlocked && handleNodeClick(phase.phase)}
+                  >
+                    <div className="node-circle">
+                      <span className="node-icon">{phase.icon}</span>
+                    </div>
+                    <div className="node-label">{phase.title}</div>
                   </div>
-                  <div className="node-label">{phase.title}</div>
-                </div>
-                
-                {/* 🔸 Conector entre fases, exceto entre módulos */}
-                {index < phaseData.length - 1 &&
-                  phase.phase !== 2 && // ❌ remove linha entre módulo 1 e 2
-                  phase.phase !== 4 && // ❌ remove linha entre módulo 2 e 3
-                  <div className="path-connector"></div>}
-              </React.Fragment>
-            ))}
+                  
+                  {/* 🔸 Conector entre fases, exceto entre módulos */}
+                  {index < phaseData.length - 1 &&
+                    phase.phase !== 2 &&
+                    phase.phase !== 4 && <div className="path-connector"></div>}
+                </React.Fragment>
+              )
+            })}
+          
+          
           
             {/* 🔹 Prática final */}
             <div

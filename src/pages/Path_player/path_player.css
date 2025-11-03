@@ -388,3 +388,14 @@
   padding: 0 12px;
   border-radius: 8px;
 }
+
+.path-node.locked .node-circle {
+  background: #374151;
+  border-color: #1f2937;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.path-node.locked .node-label {
+  color: #9ca3af;
+}
