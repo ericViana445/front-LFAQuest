@@ -257,13 +257,50 @@ const Index: React.FC = () => {
 
                   <button
                     className="confirm-btn"
-                    onClick={() => {
-                      alert("Login simulado! Redirecionando...");
-                      navigate("/path");
+                    onClick={async () => {
+                      const emailInput = document.querySelector<HTMLInputElement>('input[type="email"]');
+                      const passwordInput = document.querySelector<HTMLInputElement>('input[type="password"]');
+                    
+                      const email = emailInput?.value.trim();
+                      const password = passwordInput?.value.trim();
+                    
+                      if (!email || !password) {
+                        alert("Por favor, preencha o e-mail e a senha.");
+                        return;
+                      }
+                    
+                      const API_BASE_URL =
+                        window.location.hostname === "localhost"
+                          ? "http://localhost:5000/api"
+                          : "https://backend-lfaquest.onrender.com/api";
+                    
+                      try {
+                        console.log("🔐 Enviando login para:", `${API_BASE_URL}/auth/login`);
+                      
+                        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ email, password }),
+                        });
+                      
+                        const data = await response.json();
+                        if (!response.ok) throw new Error(data.message || "Erro no login");
+                      
+                        // ✅ Salva token e dados do usuário
+                        localStorage.setItem("token", data.token);
+                        localStorage.setItem("user", JSON.stringify(data.user));
+                      
+                        alert("✅ Login realizado com sucesso!");
+                        navigate("/path");
+                      } catch (error: any) {
+                        console.error("❌ Erro ao fazer login:", error);
+                        alert(error.message || "Erro ao fazer login. Tente novamente.");
+                      }
                     }}
                   >
                     Entrar
                   </button>
+
                 </div>
               </div>
             )}
