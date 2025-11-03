@@ -68,6 +68,8 @@ interface AnsweredQuestion {
   timeTaken: number;
 }
 
+const [localIndex, setLocalIndex] = useState(0);
+
 const LessonTemplate: React.FC<LessonTemplateProps> = ({
   lessonData,
   onComplete,
@@ -100,7 +102,6 @@ const LessonTemplate: React.FC<LessonTemplateProps> = ({
     setSelectedAnswer(null);
   }, [lessonData]);
 
-  const isLastQuestion = questionIndex + 1 === totalQuestions;
   console.debug(extractAutomatonDetails)
 
 // ===============================
@@ -347,8 +348,6 @@ const validateAutomatonEnhanced = (
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     console.log("handelando fim de lição");
 
-    if (isLastQuestion) {
-      console.log("é a ultima pergunta");
 
       try {
         console.group("📤 handleLessonComplete()");
@@ -435,7 +434,7 @@ const validateAutomatonEnhanced = (
           } catch (err) {
             console.error("❌ Erro ao salvar progresso de fases:", err);
           }
-          
+
           // exibir sumário normalmente
           setShowSummary(true);
 
@@ -444,9 +443,7 @@ const validateAutomatonEnhanced = (
       } finally {
         console.groupEnd();
       }
-    } else {
-      onComplete();
-    }
+    
   };
 
 
@@ -464,7 +461,7 @@ const validateAutomatonEnhanced = (
 
   const handleContinue = async () => {
     const timeTaken = Math.round((Date.now() - startTime) / 1000);
-
+    
     const currentQuestion: AnsweredQuestion = {
       questionId: lessonData.title.replace(/\s+/g, "_").toLowerCase(),
       isCorrect: !!isCorrect,
@@ -473,12 +470,19 @@ const validateAutomatonEnhanced = (
       tags: lessonData.tags || [],
       timeTaken,
     };
-
+  
     const updatedAnswers = [...answeredQuestions, currentQuestion];
     setAnsweredQuestions(updatedAnswers);
-
-    await handleLessonComplete();
+  
+    if (questionIndex + 1 === totalQuestions) {
+      console.log("🔥 Última questão detectada — chamando handleLessonComplete()");
+      await handleLessonComplete();
+    } else {
+      console.log("➡️ Indo para a próxima questão (Path_player controlará o fluxo)");
+      onComplete();
+    }
   };
+  
 
   if (showSummary) {
     const total = answeredQuestions.length || 1;
