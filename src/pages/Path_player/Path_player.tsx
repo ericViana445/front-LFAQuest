@@ -130,7 +130,7 @@ const Path_player: React.FC = () => {
         console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
 
         const res = await fetch(
-          `https://backend-lfaquest.onrender.com/api/users/${localUser.id}/progress`,
+          `https://backend-lfaquest.onrender.com/api/users/${localUser.id}/unlockedPhases`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
