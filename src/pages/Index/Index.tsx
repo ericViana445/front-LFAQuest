@@ -11,29 +11,90 @@ interface Question {
 
 const questions: Question[] = [
   {
-    question:
-      "Um autômato finito determinístico possui apenas uma transição possível para cada símbolo de entrada em um estado.",
-    correct_answer: "Verdadeiro",
+    question: `No contexto da teoria da computação, qual é a característica fundamental que define uma linguagem regular?`,
+    correct_answer: "C",
   },
   {
-    question: "Um autômato não determinístico pode ser transformado em um determinístico equivalente.",
-    correct_answer: "Verdadeiro",
+    question: `Considere a seguinte gramática G, onde S é o símbolo inicial:
+S → AcB
+A → cA | aB
+B → cB | aA
+A → ε
+Assinale a alternativa que apresenta a palavra que NÃO pertence à linguagem gerada pela gramática G.
+(A) ccca
+(B) aaca
+(C) aaaca
+(D) ccac
+(E) aaa`,
+    correct_answer: "E",
   },
   {
-    question: "A linguagem gerada por uma gramática regular é sempre reconhecível por um autômato finito.",
-    correct_answer: "Verdadeiro",
+    question: `Seja o autômato finito mostrado na figura abaixo que opera sobre o alfabeto Σ={a,b} (o círculo em negrito indica um estado terminal).
+
+Analise as seguintes afirmativas:
+I. O autômato finito mostrado na figura é determinístico.
+II. O autômato finito mostrado na figura é não-determinístico.
+III. O autômato finito mostrado na figura reconhece a palavra vazia.
+
+A análise permite concluir que:
+(A) todas as afirmativas são falsas.
+(B) Somente a afirmativa I é falsa.
+(C) Somente a afirmativa II é falsa.
+(D) Somente a afirmativa III é falsa.
+(E) nenhuma das afirmativas é falsa.`,
+    correct_answer: "B",
   },
   {
-    question: "Gramáticas livres de contexto são equivalentes aos autômatos finitos determinísticos.",
-    correct_answer: "Falso",
+    question: `Encontre a maior linguagem para o alfabeto {a,b} utilizando apenas uma expressão regular abaixo:
+A) ab*
+B) a*b*
+C) (ab)*
+D) (a|b)(a|b)*
+E) (a|b)*`,
+    correct_answer: "E",
   },
   {
-    question: "O lema do bombeamento pode ser usado para provar que uma linguagem é regular.",
-    correct_answer: "Falso",
+    question: `Dado o autômato Finito abaixo, assinale a alternativa onde a expressão regular (ER) o representa:
+a*b(cb)a*.
+aba(cb).
+a*b(cb)*a.
+a*b*c*b*a*.
+a*bcb*a*`,
+    correct_answer: "C",
   },
   {
-    question: "Todo autômato determinístico é também não determinístico.",
-    correct_answer: "Verdadeiro",
+    question: `Considere a expressão regular a seguir:
+(c∗a[abc]∗b[abc]∗) | c∗
+Assinale a alternativa que descreve, corretamente, todas as cadeias geradas por essa expressão regular:
+a) Cadeias sobre o alfabeto {a,b,c} onde o primeiro a precede o primeiro b.
+b) Cadeias sobre o alfabeto {a,b,c} com um número par de a's.
+c) Cadeias sobre o alfabeto {a,b,c} contendo a substring baa.
+d) Cadeias sobre o alfabeto {a,b,c} contendo um número ímpar de c's.
+e) Cadeias sobre o alfabeto {a,b,c} terminadas por c.`,
+    correct_answer: "A",
+  },
+  {
+    question: `Sobre o Teorema do Bombeamento para linguagens regulares, é INCORRETO afirmar que:
+(A) Se uma linguagem L não é regular, pode-se demonstrar que de fato L não é regular, utilizando-se o Teorema do Bombeamento.
+(B) Para toda linguagem regular L e toda palavra suficientemente grande pertencente a L, é possível afirmar que há um trecho desta palavra que pode ser repetido quantas vezes desejarmos para se obterem outras palavras de L.
+(C) O Teorema do Bombeamento pode ser utilizado para mostrar que a linguagem L, composta por palavras cujo comprimento é um número primo, não é regular.
+(D) O enunciado do Teorema do Bombeamento possui diversos quantificadores lógicos, sendo eles existenciais e universais.
+(E) O Teorema do Bombeamento pode ser utilizado para mostrar que a linguagem composta por palavras formadas por uma quantidade qualquer de 0's, seguida da mesma quantidade de 1's, não é regular.`,
+    correct_answer: "A",
+  },
+  {
+    question: `Sobre o lema do bombeamento para as linguagens regulares, analise as assertivas a seguir:
+I. Se uma linguagem é Regular, então é aceita por um Autômato Finito Determinístico o qual possui um número finito e predefinido de n estados.
+II. Se o autômato reconhece uma entrada w de comprimento maior ou igual a n, obrigatoriamente o autômato assume algum estado q mais de uma vez, então existe um ciclo na função programa que passa por q.
+III. A entrada w pode ser dividida em 3 subpalavras w = xyz tal que |xy| <= n, |y| >= 1 e onde y é a parte de w reconhecida pelo ciclo na função programa.
+IV. O Lema do bombeamento não pode ser utilizado para provar que uma determinada linguagem é Não Regular.
+Quais estão corretas?
+(A) Apenas I e II.
+(B) Apenas III e IV.
+(C) Apenas I, II e III.
+(D) Apenas II, III e IV.
+(E) I, II, III e IV.`,
+    correct_answer: "C",
   },
 ];
 
