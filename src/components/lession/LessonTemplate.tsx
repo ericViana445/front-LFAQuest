@@ -391,58 +391,54 @@ const validateAutomatonEnhanced = (
 
         console.log("✅ Lição registrada com sucesso:", response.data);
 
-        // ✅ 2. Liberar próxima fase no backend
-        try {
-          console.log("📡 Verificando desbloqueio de próxima fase...");
-
-          // Obtem o progresso atual do usuário
-          const userRes = await fetch(
-            `https://backend-lfaquest.onrender.com/api/users/${user.id}`
-          );
-          const userData = await userRes.json();
-          const unlocked = userData.unlocked_phases
-            ? JSON.parse(userData.unlocked_phases)
-            : ["1"];
-
-          // Descobre a próxima fase com base no total atual
-          const nextPhase = unlocked.length + 1;
-
-          if (!unlocked.includes(String(nextPhase)) && nextPhase <= 5) {
-            const updatedPhases = [...unlocked, String(nextPhase)];
-            console.log(
-              `🔓 Liberando nova fase: ${nextPhase}`,
-              updatedPhases
+          // 🔓 NOVO: desbloquear próxima fase
+          try {
+            console.log("📡 Verificando desbloqueio de próxima fase...");
+          
+            const userRes = await fetch(
+              `https://backend-lfaquest.onrender.com/api/users/${user.id}`
             );
-
-            const progressRes = await fetch(
-              `https://backend-lfaquest.onrender.com/api/users/${user.id}/progress`,
-              {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  unlocked_phases: JSON.stringify(updatedPhases),
-                }),
+            const userData = await userRes.json();
+            const unlocked = userData.unlocked_phases
+              ? JSON.parse(userData.unlocked_phases)
+              : ["1"];
+          
+            // calcula a próxima fase (com base na fase atual da jornada)
+            const nextPhase = unlocked.length + 1;
+          
+            if (!unlocked.includes(String(nextPhase)) && nextPhase <= 5) {
+              const updatedPhases = [...unlocked, String(nextPhase)];
+              console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
+            
+              const progressRes = await fetch(
+                `https://backend-lfaquest.onrender.com/api/users/${user.id}/progress`,
+                {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    unlocked_phases: JSON.stringify(updatedPhases),
+                  }),
+                }
+              );
+            
+              const progressData = await progressRes.json();
+              console.log("📬 Resposta do backend (update progress):", progressData);
+            
+              if (progressRes.ok) {
+                console.log(`✅ Fase ${nextPhase} liberada e salva com sucesso.`);
+              } else {
+                console.error("❌ Falha ao atualizar progresso:", progressData);
               }
-            );
-
-            const progressData = await progressRes.json();
-            console.log("📬 Resposta do backend (update progress):", progressData);
-
-            if (progressRes.ok) {
-              console.log(`✅ Fase ${nextPhase} liberada e salva com sucesso.`);
             } else {
-              console.error("❌ Falha ao atualizar progresso:", progressData);
+              console.log("ℹ️ Nenhuma nova fase a liberar (já desbloqueada).");
             }
-          } else {
-            console.log("ℹ️ Nenhuma nova fase a liberar (já desbloqueada).");
+          } catch (err) {
+            console.error("❌ Erro ao salvar progresso de fases:", err);
           }
-        } catch (err) {
-          console.error("❌ Erro ao salvar progresso de fases:", err);
-        }
+          
+          // exibir sumário normalmente
+          setShowSummary(true);
 
-        // ✅ 3. Mostrar sumário
-        console.log("setando sumario to true");
-        setShowSummary(true);
       } catch (err) {
         console.error("❌ Erro ao registrar lição:", err);
       } finally {
