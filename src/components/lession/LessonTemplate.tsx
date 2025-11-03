@@ -68,7 +68,7 @@ interface AnsweredQuestion {
   timeTaken: number;
 }
 
-const [localIndex, setLocalIndex] = useState(0);
+
 
 const LessonTemplate: React.FC<LessonTemplateProps> = ({
   lessonData,
