@@ -600,3 +600,103 @@
     opacity: 1;
   }
 }
+/* ============================= */
+/* 🧠 DIAGNÓSTICO – MÚLTIPLA ESCOLHA */
+/* ============================= */
+
+.diagnostic {
+  text-align: center;
+  color: #f1f5f9;
+  font-family: var(--font-sans);
+}
+
+.question-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+  color: #e2e8f0;
+  white-space: pre-line;
+}
+
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.answer-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  color: #f8fafc;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+
+.answer-btn:hover {
+  background: #2563eb;
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.answer-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.progress-text {
+  margin-bottom: 0.75rem;
+  color: #a1a1aa;
+  font-size: 0.95rem;
+}
+
+/* Feedback visual */
+.feedback-message {
+  margin-top: 1rem;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 8px;
+  animation: fadeIn 0.3s ease;
+}
+
+.feedback-message.correct {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.feedback-message.wrong {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Final do questionário */
+.diagnostic-finish {
+  color: #a7f3d0;
+  animation: fadeIn 0.4s ease;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .answer-btn {
+    font-size: 0.95rem;
+    padding: 0.7rem 0.9rem;
+  }
+}
+.question-image {
+  display: block;
+  margin: 1rem auto 1.5rem;
+  max-width: 350px;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
