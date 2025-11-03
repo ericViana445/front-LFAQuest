@@ -460,7 +460,7 @@ const Path_player: React.FC = () => {
               <h2 className="module-title">Módulo 1 — Autômatos e Gramáticas Regulares</h2>
               {phaseData
                 .filter((p) => p.phase === 1 || p.phase === 2)
-                .map((phase, index) => (
+                .map((phase) => (
                   <React.Fragment key={phase.phase}>
                     <div
                       className={`path-node ${currentPhase === phase.phase ? "active" : phase.phase < currentPhase ? "completed" : "upcoming"}`}
@@ -481,7 +481,7 @@ const Path_player: React.FC = () => {
               <h2 className="module-title">Módulo 2 — Expressões Regulares</h2>
               {phaseData
                 .filter((p) => p.phase === 3 || p.phase === 4)
-                .map((phase, index) => (
+                .map((phase) => (
                   <React.Fragment key={phase.phase}>
                     <div
                       className={`path-node ${currentPhase === phase.phase ? "active" : phase.phase < currentPhase ? "completed" : "upcoming"}`}
