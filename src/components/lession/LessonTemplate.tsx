@@ -342,16 +342,18 @@ const validateAutomatonEnhanced = (
 
   // ===============================
   // 🏁 Registro da lição concluída
-  // ===============================
+    // ===============================
   const handleLessonComplete = async () => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log("handelando fim de lição")
+    console.log("handelando fim de lição");
 
-    if (isLastQuestion){
-      console.log("é a ultima pergunta")
+    if (isLastQuestion) {
+      console.log("é a ultima pergunta");
+
       try {
         console.group("📤 handleLessonComplete()");
         console.log("🚀 Enviando dados de finalização da lição...");
+
         const payload = {
           user_id: user.id,
           correct_answers: answeredQuestions.filter((q) => q.isCorrect).length,
@@ -363,33 +365,94 @@ const validateAutomatonEnhanced = (
             timeTaken: q.timeTaken,
           })),
         };
-        const response = await axios.post("https://backend-lfaquest.onrender.com/api/lesson/complete", payload);
-        const { diamonds_earned, xp_earned, new_xp, new_diamonds, new_streak } = response.data;
+
+        // ✅ 1. Registrar conclusão da lição
+        const response = await axios.post(
+          "https://backend-lfaquest.onrender.com/api/lesson/complete",
+          payload
+        );
+
+        const { diamonds_earned, xp_earned, new_xp, new_diamonds, new_streak } =
+          response.data;
+
         const updatedUser = {
           ...user,
           xp: new_xp,
           diamonds: new_diamonds,
           streak: new_streak,
         };
+
         localStorage.setItem("user", JSON.stringify(updatedUser));
         setLessonResult({
           diamonds: diamonds_earned,
           xp: xp_earned,
           streak: new_streak,
         });
-        console.log("setando sumario to true")
-        setShowSummary(true)
+
         console.log("✅ Lição registrada com sucesso:", response.data);
+
+        // ✅ 2. Liberar próxima fase no backend
+        try {
+          console.log("📡 Verificando desbloqueio de próxima fase...");
+
+          // Obtem o progresso atual do usuário
+          const userRes = await fetch(
+            `https://backend-lfaquest.onrender.com/api/users/${user.id}`
+          );
+          const userData = await userRes.json();
+          const unlocked = userData.unlocked_phases
+            ? JSON.parse(userData.unlocked_phases)
+            : ["1"];
+
+          // Descobre a próxima fase com base no total atual
+          const nextPhase = unlocked.length + 1;
+
+          if (!unlocked.includes(String(nextPhase)) && nextPhase <= 5) {
+            const updatedPhases = [...unlocked, String(nextPhase)];
+            console.log(
+              `🔓 Liberando nova fase: ${nextPhase}`,
+              updatedPhases
+            );
+
+            const progressRes = await fetch(
+              `https://backend-lfaquest.onrender.com/api/users/${user.id}/progress`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  unlocked_phases: JSON.stringify(updatedPhases),
+                }),
+              }
+            );
+
+            const progressData = await progressRes.json();
+            console.log("📬 Resposta do backend (update progress):", progressData);
+
+            if (progressRes.ok) {
+              console.log(`✅ Fase ${nextPhase} liberada e salva com sucesso.`);
+            } else {
+              console.error("❌ Falha ao atualizar progresso:", progressData);
+            }
+          } else {
+            console.log("ℹ️ Nenhuma nova fase a liberar (já desbloqueada).");
+          }
+        } catch (err) {
+          console.error("❌ Erro ao salvar progresso de fases:", err);
+        }
+
+        // ✅ 3. Mostrar sumário
+        console.log("setando sumario to true");
+        setShowSummary(true);
       } catch (err) {
         console.error("❌ Erro ao registrar lição:", err);
       } finally {
         console.groupEnd();
       }
-    }else{
-      onComplete()
+    } else {
+      onComplete();
     }
-    
-  }
+  };
+
 
 
   const handleAnswerSelect = (index: number) => {
