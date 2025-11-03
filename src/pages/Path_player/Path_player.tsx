@@ -259,24 +259,24 @@ const Path_player: React.FC = () => {
 
 
   const handleLessonComplete = async (isCorrect: boolean) => {
-    console.log("handelando fim de lição"); // 👀 debug inicial
-    
+    console.log("handelando fim"); // 👀 debug inicial
+
     const updatedAnswers = [...phaseAnswers, isCorrect];
     setPhaseAnswers(updatedAnswers);
-    
+
     const isAutomatonLesson = currentLessonType === "automaton";
     console.log("é automato?", isAutomatonLesson);
-    
+
     // Se for automato, termina ali mesmo
     if (isAutomatonLesson) {
       console.log("⚙️ Finalizando lição de autômato (sem próxima questão).");
       setIsLessonActive(false);
-    
+
       if (!userData) {
         console.warn("🚫 Nenhum usuário logado, cancelando progressão.");
         return;
       }
-    
+
       try {
         console.log("📡 Enviando dados para verificar conquistas (automaton lesson).");
         const res = await fetch(`https://backend-lfaquest.onrender.com/api/users/${userData.id}/checkAchievements`);
@@ -285,25 +285,25 @@ const Path_player: React.FC = () => {
       } catch (err) {
         console.error("Erro ao verificar conquistas:", err);
       }
-    
+
       setCurrentLessonType("normal");
       return;
     }
-  
+
     const currentPhaseLessons = lessons[currentPhase - 1];
     const isLastQuestion = currentQuestionIndex >= currentPhaseLessons.length - 1;
     console.log("é a ultima pergunta?", isLastQuestion);
-  
+
     if (isLastQuestion) {
       console.log("📤 handleLessonComplete()");
       console.log("🚀 Enviando dados de finalização da lição...");
       setIsLessonActive(false);
-    
+
       if (!userData) {
         console.warn("🚫 Nenhum usuário logado — não dá pra salvar progresso.");
         return;
       }
-    
+
       try {
         console.log("📡 Enviando dados para verificar conquistas (fase normal).");
         const res = await fetch(`https://backend-lfaquest.onrender.com/api/users/${userData.id}/checkAchievements`);
@@ -312,26 +312,26 @@ const Path_player: React.FC = () => {
       } catch (err) {
         console.error("Erro ao verificar conquistas:", err);
       }
-    
+
       // 🔓 Progressão de fase
       try {
         const nextPhase = currentPhase + 1;
         const alreadyUnlocked = userData.unlocked_phases || ["1"];
         console.log("🧩 Fases já desbloqueadas:", alreadyUnlocked, "Tentando liberar:", nextPhase);
-      
+
         if (!alreadyUnlocked.includes(String(nextPhase)) && nextPhase <= 5) {
           const updatedPhases = [...alreadyUnlocked, String(nextPhase)];
           console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
-        
+
           const response = await fetch(`https://backend-lfaquest.onrender.com/api/users/${userData.id}/progress`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ unlocked_phases: JSON.stringify(updatedPhases) }),
           });
-        
+
           const result = await response.json();
           console.log("📬 Resposta do backend (update progress):", result);
-        
+
           if (response.ok) {
             setUserData((prev: any) => ({
               ...prev,
@@ -352,7 +352,7 @@ const Path_player: React.FC = () => {
       setCurrentQuestionIndex((prev) => prev + 1);
     }
   };
-  
+
 
 
 
