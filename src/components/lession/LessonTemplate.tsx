@@ -643,8 +643,12 @@ const validateAutomatonEnhanced = (
                   Confirmar Resposta
                 </button>
               ) : (
-                <button className="continue-button" onClick={handleContinue}>
-                  Continuar →
+                <button 
+                  className="continue-button" 
+                  onClick={handleContinue}
+                  disabled={isContinueClicked} // 🔒 NOVA PROP
+                >
+                  {isContinueClicked ? "Processando..." : "Continuar →"} {/* 🔄 TEXTO DINÂMICO */}
                 </button>
               )}
             </div>
