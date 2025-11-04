@@ -448,6 +448,16 @@
   transform: translateY(0);
 }
 
+.continue-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.continue-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* ====== ANIMAÇÕES ====== */
 @keyframes slideUp {
   from {

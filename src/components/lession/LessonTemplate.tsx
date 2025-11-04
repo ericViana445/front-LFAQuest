@@ -91,6 +91,7 @@ const LessonTemplate: React.FC<LessonTemplateProps> = ({
   const [userAutomaton, setUserAutomaton] = useState<{ estados: Estado[]; conexoes: Conexao[] } | null>(null);
   const automatonLessonRef = useRef<{ handleValidar: () => any }>(null);
   const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestion[]>([]);
+  const [isContinueClicked, setIsContinueClicked] = useState(false);
 
   useEffect(() => {
     setStartTime(Date.now());
@@ -100,6 +101,8 @@ const LessonTemplate: React.FC<LessonTemplateProps> = ({
     setIsSubmitted(false);
     setIsCorrect(null);
     setSelectedAnswer(null);
+    setIsContinueClicked(false);
+
   }, [lessonData]);
 
   console.debug(extractAutomatonDetails)
@@ -456,8 +459,6 @@ const validateAutomatonEnhanced = (
     
   };
 
-
-
   const handleAnswerSelect = (index: number) => {
     if (!isSubmitted) setSelectedAnswer(index);
   };
@@ -470,6 +471,9 @@ const validateAutomatonEnhanced = (
   };
 
   const handleContinue = async () => {
+    if (isContinueClicked) return;
+
+    setIsContinueClicked(true);
     const timeTaken = Math.round((Date.now() - startTime) / 1000);
 
     const currentQuestion: AnsweredQuestion = {
@@ -587,12 +591,16 @@ const validateAutomatonEnhanced = (
 
             <div className="action-buttons">
               {!isSubmitted ? (
-                <button className="submit-button" onClick={handleAutomatonSubmit} disabled={!userAutomaton}>
-                  Validar Autômato
+                <button className="submit-button" onClick={handleAutomatonSubmit} disabled={selectedAnswer === null}>
+                  Confirmar Resposta
                 </button>
               ) : (
-                <button className="continue-button" onClick={handleContinue}>
-                  Continuar →
+                <button 
+                  className="continue-button" 
+                  onClick={handleContinue}
+                  disabled={isContinueClicked} // 🔒 NOVA PROP
+                >
+                  {isContinueClicked ? "Processando..." : "Continuar →"} {/* 🔄 TEXTO DINÂMICO */}
                 </button>
               )}
             </div>
