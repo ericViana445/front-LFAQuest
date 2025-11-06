@@ -17,8 +17,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onNavigate }) => {
 
   // 🔹 Itens do menu (todos, mas só "journey" fica livre sem login)
   const navItems = [
-    { id: "journey", label: "Jornada", icon: "📖", path: "/path", requiresLogin: false },
-    { id: "leaderboard", label: "Leaderboard", icon: "🏆", path: "/leaderboard", requiresLogin: true },
+    { id: "journey", label: "Jornada de Aprendizado", icon: "📖", path: "/path", requiresLogin: false },
+    { id: "leaderboard", label: "Ranking", icon: "🏆", path: "/leaderboard", requiresLogin: true },
     { id: "store", label: "Loja", icon: "🏪", path: "/store", requiresLogin: true },
     { id: "profile", label: "Perfil", icon: "👤", path: "/profile", requiresLogin: true },
     { id: "more", label: "Estatísticas", icon: "⋯", path: "/more", requiresLogin: true },
