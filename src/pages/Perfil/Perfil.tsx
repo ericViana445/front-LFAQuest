@@ -217,7 +217,6 @@ const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
           <div className="avatar-silhouette">
             <div className="avatar-display">{currentAvatar.emoji}</div>
           </div>
-          <button className="edit-button">✏️</button>
         </div>
 
         {/* Informações do usuário */}
