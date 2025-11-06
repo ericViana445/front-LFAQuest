@@ -209,12 +209,6 @@ const Index: React.FC = () => {
       complexity: "Prova por contradição",
       icon: "💣",
     },
-    {
-      name: "Máquinas de Turing",
-      description: "Modelo teórico que define a noção de computabilidade.",
-      complexity: "Tese de Church-Turing",
-      icon: "🖥️",
-    },
   ];
 
   const features = [
