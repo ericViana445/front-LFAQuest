@@ -675,7 +675,7 @@ const Path_player: React.FC = () => {
               Continuar Fase 1
             </button>
             <button className="action-btn" onClick={() => handleNodeClick(2)}>
-              Iniciar Fase 2
+              Minhas Recomendações
             </button>
           </div>
         </div>
