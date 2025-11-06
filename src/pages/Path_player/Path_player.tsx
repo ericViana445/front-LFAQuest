@@ -453,7 +453,7 @@ const Path_player: React.FC = () => {
       return {
         isAutomaton: true,
         title: "Construção de Autômato Finito Determinístico",
-        explanation: "Marque o estado inicial com → e estados finais com ⦻.",
+        explanation: "clique em criar conexões para começar a criar os caminhos nos quais os estados passarão, então clique duas vezes no caminho para alterar o estado que o percorre ou excluir a conexão. clicando no nó é possível alterar sua propriedade, para entrada, saida ou ambo, quando estiver pronto pode clicar em verificar e comparar a AFND criada com a versão infinita demonstrada a baixo",
         alternatives: [],
         image: autoimag,
         correctAnswer: 0,
