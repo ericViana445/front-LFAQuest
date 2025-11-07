@@ -412,7 +412,6 @@ const handleReviewTopic = () => {
           {analytics.tag_most_errors && (
           <div className="suggestion-section">
             <div className="suggestion-content">
-              <div className="suggestion-icon">💡</div>
               <div className="suggestion-text">
                 <h3>Recomendação Personalizada</h3>
                 <p>
