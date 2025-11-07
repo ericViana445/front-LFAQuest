@@ -404,7 +404,7 @@ const handleReviewTopic = () => {
             <span className="stat-icon">💎</span>
             <span className="stat-number">{userData?.diamonds ?? 0}</span>
           </div>
-          <div className="stat-item purple">
+          <div className="stat-item orange">
             <span className="stat-icon">⚡</span>
             <span className="stat-number">{userData?.xp ?? 0}</span>
           </div>
