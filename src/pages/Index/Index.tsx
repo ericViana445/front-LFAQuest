@@ -144,10 +144,7 @@ const Index: React.FC = () => {
       correct_answer: q.correct_answer,
     }));
 
-    const API_BASE_URL =
-      window.location.hostname === "localhost"
-        ? "http://localhost:5000/api"
-        : "https://backend-lfaquest.onrender.com/api";
+    const API_BASE_URL = "https://backend-lfaquest.onrender.com/api";
 
     try {
       console.log("🌐 Enviando para:", `${API_BASE_URL}/users/diagnostic`);

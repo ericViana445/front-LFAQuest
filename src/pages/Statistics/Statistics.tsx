@@ -392,24 +392,6 @@ const handleReviewTopic = () => {
           </div>
         )}
 
-        {analytics.tag_most_errors && (
-          <div className="suggestion-section">
-            <div className="suggestion-content">
-              <div className="suggestion-icon">💡</div>
-              <div className="suggestion-text">
-                <h3>Recomendação Personalizada</h3>
-                <p>
-                  Identificamos que você tem mais dificuldade em <strong>{analytics.tag_most_errors}</strong>.
-                  Preparamos questões específicas para você praticar e melhorar neste tópico.
-                </p>
-              </div>
-            </div>
-            <button className="review-btn" onClick={handleReviewTopic}>
-              <span>Revisar Tópicos com Dificuldade</span>
-              <span className="btn-arrow">→</span>
-            </button>
-          </div>
-        )}
       </div>
 
       <div className="right-sidebar">
@@ -427,6 +409,24 @@ const handleReviewTopic = () => {
             <span className="stat-number">{userData?.xp ?? 0}</span>
           </div>
         </div>
+          {analytics.tag_most_errors && (
+          <div className="suggestion-section">
+            <div className="suggestion-content">
+              <div className="suggestion-icon">💡</div>
+              <div className="suggestion-text">
+                <h3>Recomendação Personalizada</h3>
+                <p>
+                  Identificamos que você tem mais dificuldade em <strong>{analytics.tag_most_errors}</strong>.
+                  Preparamos questões específicas para você praticar e melhorar neste tópico.
+                </p>
+              </div>
+            </div>
+            <button className="review-btn" onClick={handleReviewTopic}>
+              <span>Revisar Tópicos com Dificuldade</span>
+              <span className="btn-arrow">→</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
