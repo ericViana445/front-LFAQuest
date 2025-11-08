@@ -268,7 +268,7 @@ const handleReviewTopic = () => {
                   <p>{item.name}</p>
                   <span>
                     {item.unlocked ? (
-                      "✅ Desbloqueado"
+                      " Desbloqueado"
                     ) : (
                       <>
                         <FaCoins className="text-yellow-400 text-xl inline-block mr-1" />
