@@ -4,6 +4,7 @@ import type React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 import { Book, Trophy, Store, User, BarChart, Lock } from "lucide-react";
+import { FaBook, FaTrophy, FaStore, FaUser, FaChartBar, FaLock } from "react-icons/fa";
 
 interface SidebarProps {
   activeItem: string;
@@ -18,11 +19,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onNavigate }) => {
 
   // 🔹 Itens do menu (todos, mas só "journey" fica livre sem login)
   const navItems = [
-    { id: "journey", label: "Jornada de Aprendizado", icon: <Book />, path: "/path", requiresLogin: false },
-    { id: "leaderboard", label: "Ranking", icon: <Trophy />, path: "/leaderboard", requiresLogin: true },
-    { id: "store", label: "Loja", icon: <Store />, path: "/store", requiresLogin: true },
-    { id: "profile", label: "Perfil", icon: <User />, path: "/profile", requiresLogin: true },
-    { id: "more", label: "Estatísticas", icon: <BarChart />, path: "/more", requiresLogin: true },
+    { id: "journey", label: "Jornada de Aprendizado", icon: <FaBook />, path: "/path", requiresLogin: false },
+    { id: "leaderboard", label: "Ranking", icon: <FaTrophy />, path: "/leaderboard", requiresLogin: true },
+    { id: "store", label: "Loja", icon: <FaStore />, path: "/store", requiresLogin: true },
+    { id: "profile", label: "Perfil", icon: <FaUser />, path: "/profile", requiresLogin: true },
+    { id: "more", label: "Estatísticas", icon: <FaChartBar />, path: "/more", requiresLogin: true },
   ];
 
   // 🔸 Handler de clique
@@ -55,7 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onNavigate }) => {
               title={locked ? "Faça login para acessar" : item.label}
             >
               <span className="nav-icon">
-                {locked ? <Lock size={18}/> : item.icon}
+                {locked ? <FaLock /> : item.icon}
               </span>
               <span>{item.label}</span>
             </div>
