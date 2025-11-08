@@ -43,8 +43,8 @@
 }
 
 .leaderboard-item.me {
-  background: #22c55e;
-  border: 1px solid #16a34a;
+  
+  border: 2px solid #16a34a;
   font-weight: 700;
 }
 
@@ -65,5 +65,5 @@
 
 .xp {
   font-weight: 600;
-  color: #facc15;
+  color: #9ca3af;
 }

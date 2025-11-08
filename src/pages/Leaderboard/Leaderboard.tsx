@@ -1,11 +1,21 @@
 "use client";
-import { FaCoins, FaStar } from "react-icons/fa6";
+import { FaUser, FaCoins, FaStar, FaUserSecret, FaRobot, FaUserGraduate, FaLaptopCode } from "react-icons/fa6";
 import { WiDaySunny } from "react-icons/wi";
 import type React from "react";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "./Leaderboard.css";
+import { SuggestionWidget } from "../Statistics/Statistics";
+import { useNavigate } from "react-router-dom";
+import {
+  lessonsFase1,
+  lessonsFase2,
+  lessonsFase3,
+  lessonsFase4,
+  lessonsFase5,
+} from "../../components/lession/LessonData";
+
 
 interface DecodedToken {
   id: number;
@@ -21,6 +31,14 @@ interface User {
   streak_count: number;
   selected_avatar?: number;
 }
+const iconMap: Record<string, React.ReactNode> = {
+  "👤": <FaUser color="#9ca3af" size={24} />,        // Padrão
+  "👨‍💻": <FaLaptopCode color="#3b82f6" size={24} />, // Coder
+  "🎓": <FaUserGraduate color="#22c55e" size={24} />, // Student
+  "🥷": <FaUserSecret color="#8b5cf6" size={24} />,   // Ninja
+  "🤖": <FaRobot color="#06b6d4" size={24} />,        // Robot
+};
+
 
 const avatarPresets = [
   { id: 0, emoji: "👤" },
@@ -31,6 +49,10 @@ const avatarPresets = [
 ];
 
 const Leaderboard: React.FC = () => {
+  const [analytics, setAnalytics] = useState<any>(null);
+    const navigate = useNavigate();
+
+
   const [activeNavItem, setActiveNavItem] = useState("leaderboard");
   const [userData, setUserData] = useState<User | null>(null);
   const [ranking, setRanking] = useState<User[]>([]);
@@ -71,6 +93,16 @@ const Leaderboard: React.FC = () => {
           console.log("🏆 Leaderboard carregado:", data);
         })
         .catch((err) => console.error("Erro ao carregar leaderboard:", err));
+
+        // analytics
+        fetch(`https://backend-lfaquest.onrender.com/api/users/${userId}/analytics`)
+          .then((res) => res.json())
+          .then((data) => {
+            setAnalytics(data);
+            console.log("📊 Analytics carregado:", data);
+          })
+          .catch((err) => console.error("Erro ao buscar analytics:", err));
+        
     } catch (error) {
       console.error("Token inválido:", error);
     }
@@ -80,6 +112,49 @@ const Leaderboard: React.FC = () => {
   // 🏅 Ranking ordenado por XP
   // ============================================
   const sortedRanking = [...ranking].sort((a, b) => b.xp - a.xp);
+
+  const handleReviewTopic = () => {
+    if (!analytics || !analytics.tags || analytics.tags.length === 0) {
+      alert("Nenhum dado disponível para revisão");
+      return;
+    }
+
+    const lowAccuracyTags = analytics.tags.filter((t: any) => t.accuracy <= 0.35);
+
+    if (lowAccuracyTags.length === 0) {
+      alert("Parabéns! Nenhum tópico com taxa de acerto menor ou igual a 35%. 🎉");
+      return;
+    }
+
+    const tagNames = lowAccuracyTags.map((t: any) => t.tag);
+
+    const allLessons = [
+      ...lessonsFase1,
+      ...lessonsFase2,
+      ...lessonsFase3,
+      ...lessonsFase4,
+      ...lessonsFase5,
+    ];
+
+    const reviewQuestions = allLessons.filter(
+      (lesson) => lesson.tags && lesson.tags.some((tag) => tagNames.includes(tag))
+    );
+
+    if (reviewQuestions.length === 0) {
+      alert("Nenhuma questão encontrada para os tópicos com mais dificuldade");
+      return;
+    }
+
+    const limitedQuestions = reviewQuestions.slice(0, 5);
+
+    navigate("/path", {
+      state: {
+        reviewMode: true,
+        reviewQuestions: limitedQuestions,
+        reviewTags: tagNames,
+      },
+    });
+  };
 
   return (
     <div className="leaderboard-layout">
@@ -97,21 +172,20 @@ const Leaderboard: React.FC = () => {
             <p className="empty-text">Nenhum jogador ainda!</p>
           ) : (
             sortedRanking.map((userItem, index) => {
-              const avatar =
-                avatarPresets.find((a) => a.id === userItem.selected_avatar)
-                  ?.emoji ?? "👤";
+              const avatar = avatarPresets.find((a) => a.id === userItem.selected_avatar)?.emoji ?? "👤";
               const isCurrentUser = userData && userItem.id === userData.id;
               return (
                 <div
                   key={userItem.id}
-                  className={`leaderboard-item ${
-                    isCurrentUser ? "me" : ""
-                  }`}
+                  className={`leaderboard-item ${isCurrentUser ? "me" : ""}`}
                 >
                   <span className="position">#{index + 1}</span>
-                  <span className="avatar">{avatar}</span>
+                  <span className="avatar">
+                    {iconMap[avatar] || avatar}
+                  </span>
+                                  
                   <span className="name">{userItem.name}</span>
-                  <span className="xp">{userItem.xp} XP</span>
+                  <span className="xp">{userItem.xp} <FaStar className="text-blue-400 text-xl" /></span>
                 </div>
               );
             })
@@ -137,44 +211,12 @@ const Leaderboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Widget lateral */}
-        <div className="widget">
-          <div className="widget-header">
-            <h3>Leaderboard</h3>
-          </div>
-          <div className="widget-content">
-            <div className="leaderboard-message">
-              <p>
-                Continue aprendendo para ganhar XP e subir no ranking
-                semanal!
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Missões Diárias */}
-        <div className="widget">
-          <div className="widget-header">
-            <h3>Missões Diárias</h3>
-            <button className="view-button">Ver</button>
-          </div>
-          <div className="widget-content">
-            <div className="goal-item">
-              <div className="goal-text">
-                <span>Complete 5 missões</span>
-                <span className="goal-progress">0/5</span>
-              </div>
-              <span className="trophy-icon">🏆</span>
-            </div>
-            <div className="goal-item">
-              <div className="goal-text">
-                <span>Resolva 3 questões na primeira tentativa</span>
-                <span className="goal-progress">0/3</span>
-              </div>
-              <span className="trophy-icon">🏆</span>
-            </div>
-          </div>
-        </div>
+        {analytics && (
+          <SuggestionWidget
+            analytics={analytics}
+            handleReviewTopic={handleReviewTopic}
+          />
+        )}
 
         {/* Caso o usuário não esteja logado */}
         {!userData && (
