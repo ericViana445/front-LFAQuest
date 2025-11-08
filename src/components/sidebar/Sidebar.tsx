@@ -3,7 +3,6 @@
 import type React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
-import { Book, Trophy, Store, User, BarChart, Lock } from "lucide-react";
 import { FaBook, FaTrophy, FaStore, FaUser, FaChartBar, FaLock } from "react-icons/fa";
 
 interface SidebarProps {
