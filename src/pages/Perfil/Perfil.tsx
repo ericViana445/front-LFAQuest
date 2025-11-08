@@ -8,7 +8,7 @@ import {
   lessonsFase5,
 } from "../../components/lession/LessonData";
 import { SuggestionWidget } from "../Statistics/Statistics";
-import { FaUser, FaCoins, FaStar, FaUserSecret, FaRobot, FaUserGraduate, FaLaptopCode, FaShieldHalved } from "react-icons/fa6";
+import { FaUser, FaCoins, FaStar, FaUserSecret, FaRobot, FaUserGraduate, FaLaptopCode} from "react-icons/fa6";
 import { WiDaySunny } from "react-icons/wi";
 import type React from "react";
 import { useState, useEffect } from "react";
