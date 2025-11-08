@@ -5,6 +5,12 @@ import "./LessonTemplate.css";
 import AutomatonLesson, { extractAutomatonDetails } from "./AutomatonLession";
 import type { Estado, Conexao } from "./AutomatonLession";
 import axios from "axios";
+import { FaCoins, FaStar } from "react-icons/fa6";
+import { WiDaySunny } from "react-icons/wi";
+import {  
+  FaXmark, 
+  FaBookOpen,  
+} from "react-icons/fa6";
 
 // Importando as funções de validação de autômato
 import { 
@@ -92,6 +98,8 @@ const LessonTemplate: React.FC<LessonTemplateProps> = ({
   const automatonLessonRef = useRef<{ handleValidar: () => any }>(null);
   const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestion[]>([]);
   const [isContinueClicked, setIsContinueClicked] = useState(false);
+  const [faseConcluida, setFaseConcluida] = useState(false);
+
 
   useEffect(() => {
     setStartTime(Date.now());
@@ -450,6 +458,8 @@ const validateAutomatonEnhanced = (
 
           // exibir sumário normalmente
           setShowSummary(true);
+          setFaseConcluida(true);
+
 
       } catch (err) {
         console.error("❌ Erro ao registrar lição:", err);
@@ -497,6 +507,15 @@ const validateAutomatonEnhanced = (
     }
   };
 
+  // 🧩 Emita evento quando a fase for concluída
+  useEffect(() => {
+    if (faseConcluida) {
+      console.log("📢 Emitindo evento 'faseConcluida' (LessonTemplate)");
+      window.dispatchEvent(new Event("faseConcluida"));
+    }
+  }, [faseConcluida]);
+  
+
 
   if (showSummary) {
     const total = answeredQuestions.length || 1;
@@ -507,7 +526,7 @@ const validateAutomatonEnhanced = (
     return (
       <div className="summary-container">
         <div className="summary-card">
-          <h1>🎉 Lição Concluída!</h1>
+          <h1><FaStar color="#facc15" />  Lição Concluída!</h1>
           <h2>{lessonData.title}</h2>
 
           <p>
@@ -519,11 +538,9 @@ const validateAutomatonEnhanced = (
 
           {lessonResult && (
             <div className="reward-section">
-              <p className="reward-text">💎 +{lessonResult.diamonds} diamantes</p>
-              <p className="reward-text">⚡ +{lessonResult.xp} XP</p>
-              <p className="reward-text fire-text">
-                🔥 Ofensiva atual: <b>{lessonResult.streak}</b> dia{lessonResult.streak > 1 ? "s" : ""} seguidos!
-              </p>
+              <p className="reward-text"><FaCoins className="inline-icon text-yellow-400" /> +{lessonResult.diamonds} moedas</p>
+              <p className="reward-text"><FaCoins className="inline-icon text-yellow-400" /> +{lessonResult.diamonds} diamantes</p>
+              <p className="reward-text fire-text"><WiDaySunny className="inline-icon text-yellow-900" /> Ofensiva atual:{" "}<b>{lessonResult.streak}</b> dia{lessonResult.streak > 1 ? "s" : ""} seguidos!</p>
             </div>
           )}
 
@@ -546,13 +563,13 @@ const validateAutomatonEnhanced = (
       <div className="lesson-left">
         <div className="lesson-header">
           <button className="lesson-exit" onClick={onExit}>
-            ✕
+            <FaXmark size={20} />
           </button>
           <h1 className="lesson-title">{lessonData.title}</h1>
         </div>
 
         <div className="lesson-content">
-          <h2 className="content-heading">📘 Explicação / Teoria</h2>
+          <h2 className="content-heading"><FaBookOpen color="#3b82f6" /> Explicação / Teoria</h2>
           {lessonData.explanation ? (
             <div>
               <p>{lessonData.explanation}</p>
@@ -579,15 +596,26 @@ const validateAutomatonEnhanced = (
 
             {isSubmitted && (
               <div className={`feedback ${isCorrect ? "correct-feedback" : "incorrect-feedback"}`}>
-                {isCorrect ? "🎉 Parabéns! Autômato correto!" : "💭 Autômato incorreto! Tente novamente."}
-                
+                {isCorrect ? (
+                  <>
+                    <FaStar color="#facc15" />{" "}
+                    Parabéns! Autômato correto!
+                  </>
+                ) : (
+                  <>
+                    Autômato incorreto! Tente novamente.
+                  </>
+                )}
+            
                 {/* Feedback detalhado para ajudar o usuário */}
                 {!isCorrect && userAutomaton && (
                   <div className="detailed-feedback">
+                    {/* Aqui você pode renderizar dicas ou comparar o autômato esperado com o do usuário */}
                   </div>
                 )}
               </div>
             )}
+            
 
             <div className="action-buttons">
               {!isSubmitted ? (
@@ -633,9 +661,18 @@ const validateAutomatonEnhanced = (
 
             {isSubmitted && (
               <div className={`feedback ${isCorrect ? "correct-feedback" : "incorrect-feedback"}`}>
-                {isCorrect ? "🎉 Parabéns! Resposta correta!" : "💭 Resposta incorreta!"}
+                {isCorrect ? (
+                  <>
+                   <FaStar color="#facc15" /> Parabéns! Resposta correta!
+                  </>
+                ) : (
+                  <>
+                   Resposta incorreta!
+                  </>
+                )}
               </div>
             )}
+
 
             <div className="action-buttons">
               {!isSubmitted ? (
@@ -656,6 +693,7 @@ const validateAutomatonEnhanced = (
         )}
       </div>
     </div>
+    
   );
 };
 
