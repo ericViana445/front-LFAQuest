@@ -1,5 +1,6 @@
 "use client"
 import { FaCoins, FaStar } from "react-icons/fa6";
+import { FaCheck, FaXmark, FaClipboardList, FaClock,  FaTriangleExclamation } from "react-icons/fa6";
 import { WiDaySunny } from "react-icons/wi";
 import type React from "react"
 import { useEffect, useState } from "react"
@@ -45,6 +46,16 @@ const Statistics: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const navigate = useNavigate()
+
+  const cardIconMap: Record<string, React.ReactNode> = {
+  totalQuestions: <FaClipboardList color="#3b82f6" size={24} />,  // antes 📝
+  accuracy: <FaCheck color="#10b981" size={24} />,                 // antes ✓
+  avgTime: <FaClock color="#3b82f6" size={24} />,                  // antes ⏱️
+  needsAttention: < FaTriangleExclamation color="#ef4444" size={24} />, // antes ⚠️
+  correct: <FaCheck color="#10b981" size={24} />,                  // antes ✓
+  incorrect: <FaXmark color="#ef4444" size={24} />,                // antes ✗
+  default: <FaClipboardList color="#9ca3af" size={24} />,          // fallback
+}
 
   const navigator = (item: string) => setActiveNavItem(item)
 
@@ -203,7 +214,7 @@ const handleReviewTopic = () => {
 
         <div className="overview-grid">
           <div className="overview-card primary">
-            <div className="card-icon">📝</div>
+            <div className="card-icon">{cardIconMap.totalQuestions}</div>
             <div className="card-content">
               <h3>Total de Questões</h3>
               <p className="card-value">{analytics.total_questions}</p>
@@ -211,7 +222,7 @@ const handleReviewTopic = () => {
             </div>
           </div>
           <div className="overview-card success">
-            <div className="card-icon">✓</div>
+            <div className="card-icon">{cardIconMap.accuracy}</div>
             <div className="card-content">
               <h3>Taxa de Acerto</h3>
               <p className="card-value">{accuracy.toFixed(1)}%</p>
@@ -224,7 +235,7 @@ const handleReviewTopic = () => {
             </div>
           </div>
           <div className="overview-card info">
-            <div className="card-icon">⏱️</div>
+            <div className="card-icon">{cardIconMap.avgTime}</div>
             <div className="card-content">
               <h3>Tempo Médio</h3>
               <p className="card-value">{avgTime.toFixed(1)}s</p>
@@ -232,7 +243,7 @@ const handleReviewTopic = () => {
             </div>
           </div>
           <div className="overview-card warning">
-            <div className="card-icon">⚠️</div>
+            <div className="card-icon">{cardIconMap.needsAttention}</div>
             <div className="card-content">
               <h3>Precisa Atenção</h3>
               <p className="card-value-text">{analytics.tag_most_errors || "Nenhuma 🎉"}</p>
@@ -308,9 +319,10 @@ const handleReviewTopic = () => {
                     </div>
                     <div className="detail-stats-grid">
                       <div className="detail-stat-card">
-                        <div className="stat-icon-wrapper" style={{ backgroundColor: `${performance.color}20` }}>
-                          <span style={{ color: performance.color }}>📊</span>
+                        <div className="stat-icon-wrapper" style={{ backgroundColor: "#10b98120" }}>
+                          {cardIconMap.correct}
                         </div>
+
                         <div className="stat-info">
                           <h3>Taxa de Acerto</h3>
                           <p className="stat-value-large" style={{ color: performance.color }}>
@@ -328,8 +340,8 @@ const handleReviewTopic = () => {
                         </div>
                       </div>
                       <div className="detail-stat-card">
-                        <div className="stat-icon-wrapper" style={{ backgroundColor: "#3b82f620" }}>
-                          <span style={{ color: "#3b82f6" }}>⏱️</span>
+                        <div className="stat-icon-wrapper" style={{ backgroundColor: "#445eef20" }}>
+                          {cardIconMap.avgTime}
                         </div>
                         <div className="stat-info">
                           <h3>Tempo Médio</h3>
@@ -339,7 +351,7 @@ const handleReviewTopic = () => {
                       </div>
                       <div className="detail-stat-card">
                         <div className="stat-icon-wrapper" style={{ backgroundColor: "#8b5cf620" }}>
-                          <span style={{ color: "#8b5cf6" }}>📝</span>
+                          {cardIconMap.totalQuestions}
                         </div>
                         <div className="stat-info">
                           <h3>Total de Questões</h3>
@@ -348,8 +360,8 @@ const handleReviewTopic = () => {
                         </div>
                       </div>
                       <div className="detail-stat-card">
-                        <div className="stat-icon-wrapper" style={{ backgroundColor: "#10b98120" }}>
-                          <span style={{ color: "#10b981" }}>✓</span>
+                        <div className="stat-icon-wrapper" style={{ backgroundColor: "#8b5cf620" }}>
+                          {cardIconMap.correct}
                         </div>
                         <div className="stat-info">
                           <h3>Acertos</h3>
@@ -358,8 +370,8 @@ const handleReviewTopic = () => {
                         </div>
                       </div>
                       <div className="detail-stat-card">
-                        <div className="stat-icon-wrapper" style={{ backgroundColor: "#ef444420" }}>
-                          <span style={{ color: "#ef4444" }}>✗</span>
+                        <div className="stat-icon-wrapper" style={{ backgroundColor: "#8b5cf620" }}>
+                          {cardIconMap.incorrect}
                         </div>
                         <div className="stat-info">
                           <h3>Erros</h3>

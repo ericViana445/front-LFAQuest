@@ -12,6 +12,7 @@ import autoimag from "../../components/lession/LessonDataImages/automatonlixo.jp
 import Sidebar from "../../components/sidebar/Sidebar.tsx"
 import Task from "../../components/Task/Taks.tsx"
 import Lesson from "../../components/lession/LessonTemplate.tsx"
+import { useNavigate } from "react-router-dom";
 import {
   lessonsFase1,
   lessonsFase2,
@@ -19,6 +20,7 @@ import {
   lessonsFase4,
   lessonsFase5,
 } from "../../components/lession/LessonData.ts"
+import { SuggestionWidget } from "../Statistics/Statistics";
 
 
 const lessons = [lessonsFase1, lessonsFase2, lessonsFase3, lessonsFase4, lessonsFase5]
@@ -32,6 +34,8 @@ interface DecodedToken {
 }
 
 const Path_player: React.FC = () => {
+  const navigate = useNavigate();
+  const [analytics, setAnalytics] = useState<any>(null);
   const [activeNavItem, setActiveNavItem] = useState("journey")
   const [isTaskOpen, setIsTaskOpen] = useState(false)
   const [selectedTask, setSelectedTask] = useState<any>(null)
@@ -89,6 +93,15 @@ const Path_player: React.FC = () => {
           setUserData({ ...data, unlocked_phases: parsedUnlocked })
           console.log("✅ Fases desbloqueadas:", parsedUnlocked)
         })
+      // analytics
+      fetch(`https://backend-lfaquest.onrender.com/api/users/${userId}/analytics`)
+        .then((res) => res.json())
+        .then((data) => {
+          setAnalytics(data);
+          console.log("📊 Analytics carregado:", data);
+        })
+        .catch((err) => console.error("Erro ao buscar analytics:", err));
+      
     } catch (error) {
       console.error("Token inválido:", error)
     }
@@ -213,6 +226,50 @@ const Path_player: React.FC = () => {
       setRegisterError(err.message)
     }
   }
+
+  const handleReviewTopic = () => {
+    if (!analytics || !analytics.tags || analytics.tags.length === 0) {
+      alert("Nenhum dado disponível para revisão");
+      return;
+    }
+
+    const lowAccuracyTags = analytics.tags.filter((t: any) => t.accuracy <= 0.35);
+
+    if (lowAccuracyTags.length === 0) {
+      alert("Parabéns! Nenhum tópico com taxa de acerto menor ou igual a 35%. 🎉");
+      return;
+    }
+
+    const tagNames = lowAccuracyTags.map((t: any) => t.tag);
+
+    const allLessons = [
+      ...lessonsFase1,
+      ...lessonsFase2,
+      ...lessonsFase3,
+      ...lessonsFase4,
+      ...lessonsFase5,
+    ];
+
+    const reviewQuestions = allLessons.filter(
+      (lesson) => lesson.tags && lesson.tags.some((tag) => tagNames.includes(tag))
+    );
+
+    if (reviewQuestions.length === 0) {
+      alert("Nenhuma questão encontrada para os tópicos com mais dificuldade");
+      return;
+    }
+
+    const limitedQuestions = reviewQuestions.slice(0, 5);
+
+    navigate("/path", {
+      state: {
+        reviewMode: true,
+        reviewQuestions: limitedQuestions,
+        reviewTags: tagNames,
+      },
+    });
+  };
+
 
   const navigator = (item: string) => {
     setActiveNavItem(item)
@@ -675,22 +732,12 @@ const Path_player: React.FC = () => {
           </div>
         </div>
 
-        <div className="widget">
-          <div className="widget-header">
-            <h3>Ações Rápidas</h3>
-          </div>
-          <div className="widget-content">
-            <button className="action-btn" onClick={handleStartAutomatonLesson}>
-              Praticar Construção de Autômatos
-            </button>
-            <button className="action-btn" onClick={() => handleNodeClick(1)}>
-              Continuar Fase 1
-            </button>
-            <button className="action-btn" onClick={() => handleNodeClick(2)}>
-              Minhas Recomendações
-            </button>
-          </div>
-        </div>
+        {analytics && (
+          <SuggestionWidget
+            analytics={analytics}
+            handleReviewTopic={handleReviewTopic}
+          />
+        )}
 
         {!userData && (
           <div className="widget login-widget">
