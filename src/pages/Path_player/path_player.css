@@ -400,3 +400,11 @@
 .path-node.locked .node-label {
   color: #9ca3af;
 }
+
+.right-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
+  height: 100%;
+}

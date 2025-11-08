@@ -1,5 +1,10 @@
 "use client"
-
+import { SiProbot } from "react-icons/si";
+import { FaCogs, FaCode } from "react-icons/fa";
+import { GiRocket, GiSpellBook } from "react-icons/gi";
+import { FaCoins, FaStar } from "react-icons/fa6";
+import { WiDaySunny } from "react-icons/wi";
+import { FaGamepad } from "react-icons/fa";
 import React, { useState, useEffect } from "react"
 import { jwtDecode } from "jwt-decode"
 import { useLocation } from "react-router-dom"
@@ -14,6 +19,7 @@ import {
   lessonsFase4,
   lessonsFase5,
 } from "../../components/lession/LessonData.ts"
+
 
 const lessons = [lessonsFase1, lessonsFase2, lessonsFase3, lessonsFase4, lessonsFase5]
 
@@ -218,7 +224,7 @@ const Path_player: React.FC = () => {
       phase: 1,
       title: "Fundamentos dos Autômatos",
       description: "Aprenda os conceitos básicos de autômatos finitos e gramáticas regulares.",
-      icon: "🧠",
+      icon: <SiProbot className="w-8 h-8 text-blue-500" />,
       xp: 75,
       progress: 60,
       questionsCount: 5,
@@ -234,7 +240,7 @@ const Path_player: React.FC = () => {
       phase: 2,
       title: "Aplicações Avançadas",
       description: "Aprofunde seus conhecimentos com questões mais complexas sobre autômatos.",
-      icon: "⚡",
+      icon: <FaCogs className="w-8 h-8 text-orange-500" />,
       xp: 75,
       progress: 30,
       questionsCount: 5,
@@ -250,7 +256,7 @@ const Path_player: React.FC = () => {
       phase: 3,
       title: "Expressões Regulares",
       description: "Estude expressões regulares e sua relação com autômatos.",
-      icon: "🔍",
+      icon: <FaCode className="w-8 h-8 text-pink-500" />,
       xp: 100,
       progress: 0,
       questionsCount: 5,
@@ -266,7 +272,7 @@ const Path_player: React.FC = () => {
       phase: 4,
       title: "Avançado em Automatos",
       description: "Consolide seu conhecimento em autômatos e expressões regulares.",
-      icon: "🚀",
+      icon: <GiRocket className="w-8 h-8 text-green-500" />,
       xp: 100,
       progress: 0,
       questionsCount: 5,
@@ -282,7 +288,7 @@ const Path_player: React.FC = () => {
       phase: 5,
       title: "Lema do Bombeamento e Linguagens Não Regulares",
       description: "Domine o uso do Lema do Bombeamento para provar que certas linguagens não são regulares, explorando diferentes estratégias e exemplos clássicos.",
-      icon: "🧩",
+      icon: <GiSpellBook className="w-8 h-8 text-purple-600" />,
       xp: 100,
       progress: 0,
       questionsCount: 5,
@@ -579,17 +585,17 @@ const Path_player: React.FC = () => {
                   {/* 🔹 Divisores de módulos */}
                   {phase.phase === 1 && (
                     <div className="module-divider">
-                      <span>🧩 Módulo 1 — Autômatos e Gramáticas Regulares</span>
+                      <span><SiProbot className="text-blue-500 text-2xl" /> Módulo 1 — Autômatos e Gramáticas Regulares</span>
                     </div>
                   )}
                   {phase.phase === 3 && (
                     <div className="module-divider">
-                      <span>🔍 Módulo 2 — Expressões Regulares</span>
+                      <span><FaCode className="w-8 h-8 text-pink-500" /> Módulo 2 — Expressões Regulares</span>
                     </div>
                   )}
                   {phase.phase === 5 && (
                     <div className="module-divider">
-                      <span>🧠 Módulo 3 — Lema do Bombeamento</span>
+                      <span><GiSpellBook className="text-green-500 text-2xl" /> Módulo 3 — Lema do Bombeamento</span>
                     </div>
                   )}
           
@@ -628,7 +634,7 @@ const Path_player: React.FC = () => {
                   title: "Prática: Construção de Autômato",
                   description:
                     "Construa seu próprio autômato finito determinístico arrastando estados e criando transições.",
-                  icon: "🎮",
+                  icon: <FaGamepad className="text-purple-500" />,
                   xp: 25,
                   progress: 0,
                   learningPoints: [
@@ -642,7 +648,7 @@ const Path_player: React.FC = () => {
               }}
             >
               <div className="node-circle">
-                <span className="node-icon">🎮</span>
+                <span className="node-icon"><FaGamepad className="text-purple-500" /></span>
               </div>
               <div className="node-label">Prática Interativa</div>
               <div className="node-subtitle">Autômatos</div>
@@ -656,15 +662,15 @@ const Path_player: React.FC = () => {
       <div className="right-sidebar">
         <div className="stats">
           <div className="stat-item green">
-            <span className="stat-icon">🔥</span>
+            <WiDaySunny size={28} className="text-yellow-900" />
             <span className="stat-number">{userData ? (userData.streak_count ?? 0) : 0}</span>
           </div>
           <div className="stat-item orange">
-            <span className="stat-icon">💎</span>
+            <FaCoins className="text-yellow-400 text-xl" />
             <span className="stat-number">{userData ? (userData.diamonds ?? 0) : 0}</span>
           </div>
           <div className="stat-item purple">
-            <span className="stat-icon">⚡</span>
+            <FaStar className="text-blue-400 text-xl" />
             <span className="stat-number">{userData ? (userData.xp ?? 0) : 0}</span>
           </div>
         </div>

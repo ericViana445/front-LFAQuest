@@ -1,5 +1,6 @@
 "use client";
-
+import { FaCoins, FaStar } from "react-icons/fa6";
+import { WiDaySunny } from "react-icons/wi";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Sidebar from "../../components/sidebar/Sidebar";
@@ -239,20 +240,16 @@ const Store: React.FC = () => {
         {/* Estatísticas */}
         <div className="stats">
           <div className="stat-item green">
-            <span className="stat-icon">🔥</span>
-            <span className="stat-number">
-              {userData ? userData.streak_count ?? 0 : 0}
-            </span>
+            <WiDaySunny size={28} className="text-yellow-900" />
+            <span className="stat-number">{userData ? (userData.streak_count ?? 0) : 0}</span>
           </div>
           <div className="stat-item orange">
-            <span className="stat-icon">💎</span>
-            <span className="stat-number">{diamonds}</span>
+            <FaCoins className="text-yellow-400 text-xl" />
+            <span className="stat-number">{userData ? (userData.diamonds ?? 0) : 0}</span>
           </div>
           <div className="stat-item purple">
-            <span className="stat-icon">⚡</span>
-            <span className="stat-number">
-              {userData ? userData.xp ?? 0 : 0}
-            </span>
+            <FaStar className="text-blue-400 text-xl" />
+            <span className="stat-number">{userData ? (userData.xp ?? 0) : 0}</span>
           </div>
         </div>
 

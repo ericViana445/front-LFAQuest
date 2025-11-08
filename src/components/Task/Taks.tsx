@@ -49,11 +49,9 @@ const Task: React.FC<TaskProps> = ({ isOpen, onClose, taskData, onStartLesson })
         </div>
 
         <div className="task-actions">
-          <button className="task-cancel" onClick={onClose}>
-            ✕ Cancelar
-          </button>
+    
           <button className="task-start" onClick={onStartLesson}>
-            ⚡ Começar 
+             Começar 
           </button>
         </div>
       </div>
