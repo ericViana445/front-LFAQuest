@@ -5,15 +5,12 @@ import { useNavigate } from "react-router-dom";
 import "./index.css";
 import automatoFinal from "../../assets/automato_q5.png";
 import {
-  FaRepeat,
-  FaInfinity,
-  FaBomb,
   FaGamepad,
   FaChartBar,
   FaTrophy,
   FaRoute,
 } from "react-icons/fa6";
-
+import { IoClose } from "react-icons/io5";  
 import { MdCelebration } from "react-icons/md";
 
 interface Question {
@@ -203,20 +200,18 @@ const Index: React.FC = () => {
       name: "Autômatos Finitos",
       description: "Modelos computacionais que reconhecem linguagens regulares.",
       complexity: "Determinísticos e não-determinísticos",
-      icon: <FaRepeat size={28} />,
+    
     },
     {
       name: "Autômatos Infinitos",
       description: "Autômatos que processam palavras infinitas, como Büchi e Muller.",
       complexity: "Processamento contínuo",
-      icon: <FaInfinity size={28} />,
     },
     {
       name: "Lema do Bombeamento",
       description: "Ferramenta usada para provar que uma linguagem não é regular.",
       complexity: "Prova por contradição",
-      icon: <FaBomb size={28} />,
-    },
+    },  
   ];
   
   const features = [
@@ -274,7 +269,6 @@ const Index: React.FC = () => {
         <div className="algorithms-grid">
           {topics.map((topic, i) => (
             <div key={i} className="algorithm-card">
-              <div className="algorithm-icon">{topic.icon}</div>
               <h3 className="algorithm-name">{topic.name}</h3>
               <p className="algorithm-description">{topic.description}</p>
               <span className="complexity-value">{topic.complexity}</span>
@@ -316,7 +310,11 @@ const Index: React.FC = () => {
       {/* MODAL */}
       {showModal && (
         <div className="modal-overlay">
-          <div className="modal">
+          <div className="modal-a">
+            {/* Botão de fechar (X) */}
+            <button className="close-btn" onClick={() => setShowModal(false)}>
+              <IoClose size={24} />
+            </button>
             {step === "choose" && (
               <>
                 <h2>Você já utiliza a plataforma?</h2>
@@ -327,9 +325,6 @@ const Index: React.FC = () => {
                   </button>
                   <button className="confirm-btn-alt" onClick={() => setStep("diagnostic")}>
                     Não, é minha primeira vez
-                  </button>
-                  <button className="cancel-btn" onClick={() => setShowModal(false)}>
-                    Cancelar
                   </button>
                 </div>
               </>
@@ -342,9 +337,6 @@ const Index: React.FC = () => {
                 <input type="email" placeholder="E-mail" />
                 <input type="password" placeholder="Senha" />
                 <div className="login-actions">
-                  <button className="cancel-btn" onClick={() => setStep("choose")}>
-                    Cancelar
-                  </button>
                   <button
                     className="confirm-btn"
                     onClick={async () => {
@@ -431,7 +423,7 @@ const Index: React.FC = () => {
                 <h2 className="flex items-center justify-center gap-2">
                   <MdCelebration size={26} /> Questionário concluído!
                 </h2>
-                            
+
                 <p>
                   Você acertou <strong>{score}</strong> de{" "}
                   <strong>{questions.length}</strong> perguntas.
