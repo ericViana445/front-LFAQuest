@@ -88,9 +88,8 @@ const Leaderboard: React.FC = () => {
 
       {/* Conteúdo principal */}
       <div className="leaderboard-main">
-        <div className="leaderboard-header">
-          <h2>Leaderboard</h2>
-          <p>Veja sua posição no ranking!</p>
+        <div className="leaderboard-title">
+          <h1>Ranking</h1>
         </div>
 
         <div className="leaderboard-list">

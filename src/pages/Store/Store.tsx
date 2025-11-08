@@ -1,10 +1,24 @@
 "use client";
+import { SuggestionWidget } from "../Statistics/Statistics"
+import { FaUserSecret, FaRobot} from "react-icons/fa6";
+import { FaUserGraduate, FaLaptopCode } from "react-icons/fa6";
+import { FaShield, FaShieldHalved } from "react-icons/fa6";
 import { FaCoins, FaStar } from "react-icons/fa6";
 import { WiDaySunny } from "react-icons/wi";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "./Store.css";
+import {
+  lessonsFase1,
+  lessonsFase2,
+  lessonsFase3,
+  lessonsFase4,
+  lessonsFase5,
+} from "../../components/lession/LessonData";
+
+import { useNavigate } from "react-router-dom";
+
 
 interface StoreItem {
   id: number;
@@ -27,11 +41,73 @@ interface DecodedToken {
   exp: number;
 }
 
+
+const iconMap: Record<string, React.ReactNode> = {
+  "👨‍💻": <FaLaptopCode color="#3b82f6" size={32} />, // Coder
+  "🎓": <FaUserGraduate color="#22c55e" size={32} />, // Student
+  "🥷": <FaUserSecret color="#8b5cf6" size={32} />,   // Ninja
+  "🤖": <FaRobot color="#06b6d4" size={32} />,        // Robot
+  "💎": <FaCoins color="#facc15" size={32} />,        // Moeda
+  "🛡️": <FaShieldHalved color="#ef4444" size={32} /> // Escudo
+};
+
 const Store: React.FC = () => {
   const [activeNavItem, setActiveNavItem] = useState("store");
   const [userData, setUserData] = useState<any>(null);
   const [purchasedItems, setPurchasedItems] = useState<Purchase[]>([]);
   const [diamonds, setDiamonds] = useState(0);
+  const [analytics, setAnalytics] = useState<any>(null);
+  const navigate = useNavigate();
+
+const handleReviewTopic = () => {
+  if (!analytics || !analytics.tags || analytics.tags.length === 0) {
+    alert("Nenhum dado disponível para revisão");
+    return;
+  }
+
+  // 1️⃣ Filtra as tags com acerto menor ou igual a 35%
+  const lowAccuracyTags = analytics.tags.filter((t: any) => t.accuracy <= 0.35);
+
+  if (lowAccuracyTags.length === 0) {
+    alert("Parabéns! Nenhum tópico com taxa de acerto menor ou igual a 35%. 🎉");
+    return;
+  }
+
+  // 2️⃣ Extrai o nome das tags com baixo desempenho
+  const tagNames = lowAccuracyTags.map((t: any) => t.tag);
+
+  // 3️⃣ Importa todas as lições (igual ao arquivo de Estatísticas)
+  const allLessons = [
+    ...lessonsFase1,
+    ...lessonsFase2,
+    ...lessonsFase3,
+    ...lessonsFase4,
+    ...lessonsFase5,
+  ];
+
+  // 4️⃣ Filtra as questões que correspondem a essas tags
+  const reviewQuestions = allLessons.filter(
+    (lesson) => lesson.tags && lesson.tags.some((tag) => tagNames.includes(tag))
+  );
+
+  if (reviewQuestions.length === 0) {
+    alert("Nenhuma questão encontrada para os tópicos com mais dificuldade");
+    return;
+  }
+
+  // 5️⃣ Limita a 5 questões
+  const limitedQuestions = reviewQuestions.slice(0, 5);
+
+  // 6️⃣ Redireciona para a página de lições com modo revisão
+  navigate("/path", {
+    state: {
+      reviewMode: true,
+      reviewQuestions: limitedQuestions,
+      reviewTags: tagNames,
+    },
+  });
+};
+
 
   // ================================
   // 🧠 Buscar dados do backend (usuário + compras)
@@ -64,6 +140,14 @@ const Store: React.FC = () => {
           setPurchasedItems(data);
         })
         .catch((err) => console.error("Erro ao buscar compras:", err));
+      
+      fetch(`https://backend-lfaquest.onrender.com/api/users/${userId}/analytics`)
+        .then((res) => res.json())
+        .then((data) => {
+          setAnalytics(data);
+          console.log(" Analytics carregado:", data);
+        })
+        .catch((err) => console.error("Erro ao buscar analytics:", err));
     } catch (error) {
       console.error("Token inválido:", error);
     }
@@ -158,10 +242,10 @@ const Store: React.FC = () => {
 
       {/* Conteúdo principal */}
       <div className="store-main">
-        <h1 className="store-title">Game Store</h1>
+        <h1 className="store-title">Loja</h1>
 
         {userData ? (
-          <p className="store-balance">💎 Seus diamantes: {diamonds}</p>
+          <p className="store-balance"><FaCoins className="text-yellow-400 text-xl" />  Seus diamantes: {diamonds}</p>
         ) : (
           <p className="store-balance">
             ⚠️ Faça login para comprar e desbloquear novos itens!
@@ -180,11 +264,19 @@ const Store: React.FC = () => {
                   className={`store-item ${item.unlocked ? "unlocked" : "locked"}`}
                   onClick={() => handlePurchase(item)}
                 >
-                  <div className="store-icon">{item.emoji}</div>
+                  <div className="store-icon">{iconMap[item.emoji || ""] || item.emoji}</div>
                   <p>{item.name}</p>
                   <span>
-                    {item.unlocked ? "✅ Desbloqueado" : `💎 ${item.cost}`}
+                    {item.unlocked ? (
+                      "✅ Desbloqueado"
+                    ) : (
+                      <>
+                        <FaCoins className="text-yellow-400 text-xl inline-block mr-1" />
+                        {item.cost}
+                      </>
+                    )}
                   </span>
+                  
                 </div>
               ))}
           </div>
@@ -205,8 +297,16 @@ const Store: React.FC = () => {
                 >
                   <p>{item.name}</p>
                   <span>
-                    {item.unlocked ? "✅ Desbloqueado" : `💎 ${item.cost}`}
+                    {item.unlocked ? (
+                      "✅ Desbloqueado"
+                    ) : (
+                      <>
+                        <FaCoins style={{ color: "#ffffffff" }}className="text-yellow-400 text-xl inline-block mr-1" />
+                        {item.cost}
+                      </>
+                    )}
                   </span>
+                  
                 </div>
               ))}
           </div>
@@ -227,8 +327,16 @@ const Store: React.FC = () => {
                   <div className="store-icon">{item.emoji}</div>
                   <p>{item.name}</p>
                   <span>
-                    {item.unlocked ? "✅ Desbloqueado" : `💎 ${item.cost}`}
+                    {item.unlocked ? (
+                      "✅ Desbloqueado"
+                    ) : (
+                      <>
+                        <FaCoins style={{ color: "#bcb4b4df" }} className="text-yellow-800 text-xl inline-block mr-1" />
+                        {item.cost}
+                      </>
+                    )}
                   </span>
+                  
                 </div>
               ))}
           </div>
@@ -253,47 +361,14 @@ const Store: React.FC = () => {
           </div>
         </div>
 
-        {/* Leaderboard */}
-        <div className="widget">
-          <div className="widget-header">
-            <h3>Leaderboard</h3>
-            <button className="view-button">Ver</button>
-          </div>
-          <div className="widget-content">
-            <div className="leaderboard-message">
-              <span className="lock-icon">🔒</span>
-              <p>
-                Continue aprendendo e ganhe XP para conquistar novos itens na
-                loja!
-              </p>
-            </div>
-          </div>
-        </div>
+        {analytics && (
+          <SuggestionWidget
+            analytics={analytics}
+            handleReviewTopic={handleReviewTopic}
+          />
+        )}
 
-        {/* Missões Diárias */}
-        <div className="widget">
-          <div className="widget-header">
-            <h3>Missões Diárias</h3>
-            <button className="view-button">Revisão</button>
-          </div>
-          <div className="widget-content">
-            <div className="goal-item">
-              <div className="goal-text">
-                <span>Complete 5 missões</span>
-                <span className="goal-progress">0/5</span>
-              </div>
-              <span className="trophy-icon">🏆</span>
-            </div>
-            <div className="goal-item">
-              <div className="goal-text">
-                <span>Resolva 3 questões na primeira tentativa</span>
-                <span className="goal-progress">0/3</span>
-              </div>
-              <span className="trophy-icon">🏆</span>
-            </div>
-          </div>
-        </div>
-
+        
         {/* Caso o usuário não esteja logado */}
         {!userData && (
           <div className="widget login-widget">

@@ -573,7 +573,7 @@ const Path_player: React.FC = () => {
       <Sidebar activeItem={activeNavItem} onNavigate={navigator} />
       <div className="main-content">
         <div className="learning-path">
-          <div className="path-title">Jornada de Autômatos Finitos</div>
+          <div className="store-title">Jornada de Aprendizado</div>
 
           <div className="path-nodes">
             {phaseData.map((phase: any, index: number) => {

@@ -420,3 +420,31 @@ const handleReviewTopic = () => {
 }
 
 export default Statistics
+
+import type { FC } from "react"
+
+export const SuggestionWidget: FC<{
+  analytics: AnalyticsData
+  handleReviewTopic: () => void
+}> = ({ analytics, handleReviewTopic }) => {
+  if (!analytics?.tag_most_errors) return null
+
+  return (
+    <div className="suggestion-section">
+      <div className="suggestion-content">
+        <div className="suggestion-text">
+          <h3>Recomendação Personalizada</h3>
+          <p>
+            Identificamos que você tem mais dificuldade em{" "}
+            <strong>{analytics.tag_most_errors}</strong>.
+            Preparamos questões específicas para você praticar e melhorar neste tópico.
+          </p>
+        </div>
+      </div>
+      <button className="review-btn" onClick={handleReviewTopic}>
+        <span>Revisar Tópicos com Dificuldade</span>
+        <span className="btn-arrow">→</span>
+      </button>
+    </div>
+  )
+}
