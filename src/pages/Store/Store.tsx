@@ -2,7 +2,7 @@
 import { SuggestionWidget } from "../Statistics/Statistics"
 import { FaUserSecret, FaRobot} from "react-icons/fa6";
 import { FaUserGraduate, FaLaptopCode } from "react-icons/fa6";
-import { FaShield, FaShieldHalved } from "react-icons/fa6";
+import { FaShieldHalved } from "react-icons/fa6";
 import { FaCoins, FaStar } from "react-icons/fa6";
 import { WiDaySunny } from "react-icons/wi";
 import { useState, useEffect } from "react";
