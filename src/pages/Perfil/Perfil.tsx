@@ -1,6 +1,14 @@
 "use client";
-
-import { FaCoins, FaStar } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+import {
+  lessonsFase1,
+  lessonsFase2,
+  lessonsFase3,
+  lessonsFase4,
+  lessonsFase5,
+} from "../../components/lession/LessonData";
+import { SuggestionWidget } from "../Statistics/Statistics";
+import { FaUser, FaCoins, FaStar, FaUserSecret, FaRobot, FaUserGraduate, FaLaptopCode, FaShieldHalved } from "react-icons/fa6";
 import { WiDaySunny } from "react-icons/wi";
 import type React from "react";
 import { useState, useEffect } from "react";
@@ -33,8 +41,20 @@ interface Achievement {
   unlocked: boolean;
 }
 
+const iconMap: Record<string, React.ReactNode> = {
+  "👤": <FaUser color="#9ca3af"  />,        // Padrão
+  "👨‍💻": <FaLaptopCode color="#3b82f6" />, // Coder
+  "🎓": <FaUserGraduate color="#22c55e"  />, // Student
+  "🥷": <FaUserSecret color="#8b5cf6"  />,   // Ninja
+  "🤖": <FaRobot color="#06b6d4" />,        // Robot
+  "💎": <FaCoins color="#facc15" />,        // Moeda
+};
+
 const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
+  const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState("profile");
+  const [analytics, setAnalytics] = useState<any>(null);
+
 
   // Estes DOIS estados agora guardam **IDs** de preset (não índices)
   const [selectedAvatar, setSelectedAvatar] = useState<number>(0);
@@ -99,6 +119,15 @@ const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
           setAchievements(data);
         })
         .catch((err) => console.error("Erro ao carregar conquistas:", err));
+      // analytics
+      fetch(`https://backend-lfaquest.onrender.com/api/users/${userId}/analytics`)
+        .then((res) => res.json())
+        .then((data) => {
+          setAnalytics(data);
+          console.log(" Analytics carregado:", data);
+        })
+        .catch((err) => console.error("Erro ao buscar analytics:", err));
+      
 
     } catch (error) {
       console.error("Token inválido:", error);
@@ -169,6 +198,49 @@ const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
     onNavigate?.(item);
   };
 
+  const handleReviewTopic = () => {
+    if (!analytics || !analytics.tags || analytics.tags.length === 0) {
+      alert("Nenhum dado disponível para revisão");
+      return;
+    }
+
+    const lowAccuracyTags = analytics.tags.filter((t: any) => t.accuracy <= 0.35);
+
+    if (lowAccuracyTags.length === 0) {
+      alert("Parabéns! Nenhum tópico com taxa de acerto menor ou igual a 35%. 🎉");
+      return;
+    }
+
+    const tagNames = lowAccuracyTags.map((t: any) => t.tag);
+
+    const allLessons = [
+      ...lessonsFase1,
+      ...lessonsFase2,
+      ...lessonsFase3,
+      ...lessonsFase4,
+      ...lessonsFase5,
+    ];
+
+    const reviewQuestions = allLessons.filter(
+      (lesson) => lesson.tags && lesson.tags.some((tag) => tagNames.includes(tag))
+    );
+
+    if (reviewQuestions.length === 0) {
+      alert("Nenhuma questão encontrada para os tópicos com mais dificuldade");
+      return;
+    }
+
+    const limitedQuestions = reviewQuestions.slice(0, 5);
+
+    navigate("/path", {
+      state: {
+        reviewMode: true,
+        reviewQuestions: limitedQuestions,
+        reviewTags: tagNames,
+      },
+    });
+  };
+
   // Conquistas (exemplo)
   {/* Conquistas reais */}
   <div className="widget badges-section">
@@ -217,7 +289,7 @@ const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
           style={{ background: currentBackground.gradient }}
         >
           <div className="avatar-silhouette">
-            <div className="avatar-display">{currentAvatar.emoji}</div>
+            <div className="avatar-display"style={{ fontSize: "4rem" }}>{iconMap[currentAvatar.emoji] || currentAvatar.emoji}</div>
           </div>
         </div>
 
@@ -268,7 +340,7 @@ const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
                   onClick={() => setSelectedAvatar(avatar.id)} // salva ID
                   title={avatar.name}
                 >
-                  <span className="preset-emoji">{avatar.emoji}</span>
+                  <span className="preset-emoji">{iconMap[avatar.emoji] || avatar.emoji}</span>
                 </button>
               ))}
             </div>
@@ -310,43 +382,14 @@ const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        <div className="widget">
-          <div className="widget-header">
-            <h3>Ranking</h3>
-            <button className="view-button">Ver</button>
-          </div>
-          <div className="widget-content">
-            <div className="leaderboard-message">
-              <span className="lock-icon">🔒</span>
-              <p>Comece a aprender e ganhe XP para entrar no ranking desta semana!</p>
-            </div>
-          </div>
-        </div>
+        {analytics && (
+          <SuggestionWidget
+            analytics={analytics}
+            handleReviewTopic={handleReviewTopic}
+          />
+        )}
 
-        <div className="widget">
-          <div className="widget-header">
-            <h3>Metas Diárias</h3>
-            <button className="view-button">Ver</button>
-          </div>
-          <div className="widget-content">
-            <div className="goal-item">
-              <div className="goal-text">
-                <span>Concluir 5 lições</span>
-                <span className="goal-progress">0/5</span>
-              </div>
-              <span className="trophy-icon">🏆</span>
-            </div>
-            <div className="goal-item">
-              <div className="goal-text">
-                <span>Resolver 3 questões na primeira tentativa</span>
-                <span className="goal-progress">0/3</span>
-              </div>
-              <span className="trophy-icon">🏆</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="widget logout-widget">
+        <div className="widget-logout-widget">
           <div className="widget-header">
             <h3>Encerrar Sessão</h3>
           </div>
