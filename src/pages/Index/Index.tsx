@@ -4,6 +4,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
 import automatoFinal from "../../assets/automato_q5.png";
+import {
+  FaRepeat,
+  FaInfinity,
+  FaBomb,
+  FaGamepad,
+  FaChartBar,
+  FaTrophy,
+  FaRoute,
+} from "react-icons/fa6";
+
+import { MdCelebration } from "react-icons/md";
 
 interface Question {
   question: string;
@@ -192,44 +203,45 @@ const Index: React.FC = () => {
       name: "Autômatos Finitos",
       description: "Modelos computacionais que reconhecem linguagens regulares.",
       complexity: "Determinísticos e não-determinísticos",
-      icon: "🔁",
+      icon: <FaRepeat size={28} />,
     },
     {
       name: "Autômatos Infinitos",
       description: "Autômatos que processam palavras infinitas, como Büchi e Muller.",
       complexity: "Processamento contínuo",
-      icon: "♾️",
+      icon: <FaInfinity size={28} />,
     },
     {
       name: "Lema do Bombeamento",
       description: "Ferramenta usada para provar que uma linguagem não é regular.",
       complexity: "Prova por contradição",
-      icon: "💣",
+      icon: <FaBomb size={28} />,
     },
   ];
-
+  
   const features = [
     {
       title: "Aprendizado Interativo",
       description: "Explore conceitos teóricos com animações e simulações visuais.",
-      icon: "🎮",
+      icon: <FaGamepad size={26} />,
     },
     {
       title: "Acompanhamento de Progresso",
       description: "Monitore seu domínio em tópicos como linguagens formais e autômatos.",
-      icon: "📊",
+      icon: <FaChartBar size={26} />,
     },
     {
       title: "Experiência Gamificada",
       description: "Ganhe pontos, avance em trilhas e supere desafios teóricos.",
-      icon: "🏆",
+      icon: <FaTrophy size={26} />,
     },
     {
       title: "Trilha Personalizada",
       description: "Conteúdo adaptado ao seu conhecimento em teoria da computação.",
-      icon: "🛤️",
+      icon: <FaRoute size={26} />,
     },
   ];
+  
 
   return (
     <div className="index-container">
@@ -416,7 +428,10 @@ const Index: React.FC = () => {
             {/* FINAL */}
             {step === "done" && (
               <div className="diagnostic-finish">
-                <h2>🎉 Questionário concluído!</h2>
+                <h2 className="flex items-center justify-center gap-2">
+                  <MdCelebration size={26} /> Questionário concluído!
+                </h2>
+                            
                 <p>
                   Você acertou <strong>{score}</strong> de{" "}
                   <strong>{questions.length}</strong> perguntas.
