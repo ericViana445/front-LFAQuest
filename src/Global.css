@@ -215,6 +215,11 @@ button:focus-visible {
   color: #9ca3af;
 }
 
+body{
+  display: block;
+  margin: 0px;
+}
+
 .trophy-icon {
   font-size: 16px;
 }
