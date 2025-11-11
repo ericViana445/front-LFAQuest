@@ -471,8 +471,7 @@ const Path_player: React.FC = () => {
               body: JSON.stringify({ unlocked_phases: updatedPhases }), // ✅ envia array puro
             }
           );
-
-//TETE
+          
           const result = await response.json();
           console.log("📬 Resposta do backend (update progress):", result);
 

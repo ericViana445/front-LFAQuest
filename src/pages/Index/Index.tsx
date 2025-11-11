@@ -42,26 +42,7 @@ Assinale a alternativa que NÃO pertence à linguagem gerada pela gramática.`,
     options: ["A) ccca", "B) aaca", "C) aaaca", "D) ccac", "E) aaa"],
     correct_answer: "E",
   },
-  {
-    question: `Analise:
-I. O autômato é determinístico.
-II. O autômato é não determinístico.
-III. O autômato reconhece a palavra vazia.
-A análise permite concluir que:`,
-    options: [
-      "A) Todas as afirmativas são falsas.",
-      "B) Somente a afirmativa I é falsa.",
-      "C) Somente a afirmativa II é falsa.",
-      "D) Somente a afirmativa III é falsa.",
-      "E) Nenhuma das afirmativas é falsa.",
-    ],
-    correct_answer: "B",
-  },
-  {
-    question: `Encontre a maior linguagem para o alfabeto {a,b} usando uma expressão regular:`,
-    options: ["A) ab*", "B) a*b*", "C) (ab)*", "D) (a|b)(a|b)*", "E) (a|b)*"],
-    correct_answer: "E",
-  },
+  
   {
     question:
       "Dado o autômato finito abaixo, assinale a alternativa onde a expressão regular o representa:",
@@ -96,22 +77,6 @@ A análise permite concluir que:`,
       "E) Pode ser usado para mostrar que a linguagem {0ⁿ1ⁿ} não é regular.",
     ],
     correct_answer: "A",
-  },
-  {
-    question: `Sobre o Lema do Bombeamento para linguagens regulares, analise:
-I. Toda linguagem regular é aceita por um AFD com n estados.
-II. Para palavras com |w| ≥ n, o autômato repete um estado.
-III. A palavra pode ser dividida em w = xyz, com |xy| ≤ n e |y| ≥ 1.
-IV. O lema não pode ser usado para provar que uma linguagem é não regular.
-Quais estão corretas?`,
-    options: [
-      "A) Apenas I e II.",
-      "B) Apenas III e IV.",
-      "C) Apenas I, II e III.",
-      "D) Apenas II, III e IV.",
-      "E) I, II, III e IV.",
-    ],
-    correct_answer: "C",
   },
 ];
 
@@ -397,7 +362,7 @@ const Index: React.FC = () => {
                   Pergunta {currentQuestion + 1} de {questions.length}
                 </p>
                 <p className="question-text">{questions[currentQuestion].question}</p>
-                {currentQuestion === 4 && (
+                {currentQuestion ===  2 && (
                   <img
                     src={automatoFinal}
                     alt="Autômato da questão 5"

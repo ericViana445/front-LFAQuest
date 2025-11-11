@@ -113,12 +113,12 @@ export const lesson_fase1_q5 = {
   divisão e exponenciação). O software reproduz na tela do computador a entrada, os resultados parciais 
   e o resultado final da expressão e, ainda, trata os operadores de exponenciação, multiplicação e divisão 
   com precedência sobre os operadores de soma e subtração. Para obter o referido software, é correto que o 
-  projetista
+  projetista 
 
-  I) defina uma cadeia de caracteres para armazenar e imprimir toda a expressão de entrada.
-  II) defina uma gramática regular para identificar as expressões aritméticas válidas.
-  III) defina um reconhecedor de linguagem regular com autômato finito determinístico.
-  IV) especifique a ordem de precedência dos operadores com uma notação de gramática livre de contexto.
+  I) Uma cadeia de caracteres para armazenar e imprimir toda a expressão de entrada. 
+  II) Uma gramática regular para identificar as expressões aritméticas válidas.
+  III) Um reconhecedor de linguagem regular com autômato finito determinístico.\n
+  IV) Especifique a ordem de precedência dos operadores com uma notação de gramática livre de contexto.\n
   `,
 
   alternatives: [
