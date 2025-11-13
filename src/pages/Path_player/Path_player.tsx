@@ -550,7 +550,7 @@ const Path_player: React.FC = () => {
       }
     }
 
-    const currentPhaseLessons = lessons[currentPhase - 1]
+    const currentPhaseLessons = lessons[currentPhase]
     const currentLesson = currentPhaseLessons[currentQuestionIndex]
 
     if (currentLesson) {
