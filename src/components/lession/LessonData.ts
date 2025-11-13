@@ -117,8 +117,8 @@ export const lesson_fase1_q5 = {
 
   I) Uma cadeia de caracteres para armazenar e imprimir toda a expressão de entrada. 
   II) Uma gramática regular para identificar as expressões aritméticas válidas.
-  III) Um reconhecedor de linguagem regular com autômato finito determinístico.\n
-  IV) Especifique a ordem de precedência dos operadores com uma notação de gramática livre de contexto.\n
+  III) Um reconhecedor de linguagem regular com autômato finito determinístico.
+  IV) Especifique a ordem de precedência dos operadores com uma notação de gramática livre de contexto.
   `,
 
   alternatives: [
@@ -154,7 +154,7 @@ export const lesson_fase2_q1 = {
 
   image: f2q1,
 
-  question: "Observando o autômato acima, qual das afirmativas sobre reconhecimento de palavras é FALSA?",
+  question: "Observando o autômato ao lado, qual das afirmativas sobre reconhecimento de palavras é FALSA?",
 
   alternatives: [
     "A palavra aaa é reconhecida pelo autômato.",
