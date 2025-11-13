@@ -569,18 +569,28 @@ const validateAutomatonEnhanced = (
         </div>
 
         <div className="lesson-content">
-          <h2 className="content-heading"><FaBookOpen color="#3b82f6" /> Explicação / Teoria</h2>
+          <h2 className="content-heading">
+            <FaBookOpen color="#3b82f6" /> Explicação / Teoria
+          </h2>
+          
           {lessonData.explanation ? (
             <div>
-              <p>{lessonData.explanation}</p>
+              <p style={{ whiteSpace: "pre-line" }}>{lessonData.explanation}</p>
+          
               {lessonData.image && (
                 <div className="lesson-image-container">
-                  <img src={lessonData.image} alt="Ilustração da questão" className="lesson-image" />
+                  <img
+                    src={lessonData.image}
+                    alt="Ilustração da questão"
+                    className="lesson-image"
+                  />
                 </div>
               )}
             </div>
           ) : (
-            <p style={{ color: "#64748b" }}>Nenhuma explicação disponível para esta pergunta.</p>
+            <p style={{ color: "#64748b" }}>
+              Nenhuma explicação disponível para esta pergunta.
+            </p>
           )}
         </div>
       </div>
