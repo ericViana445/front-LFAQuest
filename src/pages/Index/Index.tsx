@@ -88,6 +88,8 @@ const Index: React.FC = () => {
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [score, setScore] = useState(0);
   const navigate = useNavigate();
+  const [loadingLogin, setLoadingLogin] = useState(false);
+
 
   const handleAnswer = (value: string) => {
     const correct = questions[currentQuestion].correct_answer === value;
@@ -304,43 +306,54 @@ const Index: React.FC = () => {
                 <div className="login-actions">
                   <button
                     className="confirm-btn"
+                    disabled={loadingLogin}
                     onClick={async () => {
                       const emailInput = document.querySelector<HTMLInputElement>('input[type="email"]');
                       const passwordInput = document.querySelector<HTMLInputElement>('input[type="password"]');
                       const email = emailInput?.value.trim();
                       const password = passwordInput?.value.trim();
-
+                    
                       if (!email || !password) {
                         alert("Por favor, preencha o e-mail e a senha.");
                         return;
                       }
-
+                    
                       const API_BASE_URL =
                         window.location.hostname === "localhost"
                           ? "http://localhost:5000/api"
                           : "https://backend-lfaquest.onrender.com/api";
-
+                    
                       try {
+                        setLoadingLogin(true); // 👉 inicia o loading
+                      
                         const response = await fetch(`${API_BASE_URL}/auth/login`, {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({ email, password }),
                         });
+                      
                         const data = await response.json();
                         if (!response.ok) throw new Error(data.message || "Erro no login");
-
+                      
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("user", JSON.stringify(data.user));
-
+                      
                         alert("✅ Login realizado com sucesso!");
                         navigate("/path");
                       } catch (error: any) {
                         alert(error.message || "Erro ao fazer login.");
+                      } finally {
+                        setLoadingLogin(false); // 👉 termina o loading
                       }
                     }}
                   >
-                    Entrar
+                    {loadingLogin ? (
+                      <div className="loading-spinner"></div>
+                    ) : (
+                      "Entrar"
+                    )}
                   </button>
+                  
                 </div>
               </div>
             )}
