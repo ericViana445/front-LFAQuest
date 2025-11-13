@@ -515,14 +515,9 @@ const Path_player: React.FC = () => {
       return {
         isAutomaton: true,
         title: "Construção de Autômato Finito Determinístico",
-        explanation: `clique em criar conexões para começar a criar os 
-        caminhos nos quais os estados passarão, então clique duas vezes 
-        no caminho para alterar o estado que o percorre ou excluir a conexão. 
-        clicando no nó é possível alterar sua propriedade, para entrada, 
-        saída ou ambo, quando estiver pronto pode clicar em verificar e 
-        comparar o autômato finito determinístico (AFD) criada com a versão 
-        não determinística demonstrada a baixo`,
+        explanation: `Um AFND (Autômato Finito Não Determinístico) permite múltiplas transições ou transições vazias a partir de um mesmo estado`,
         alternatives: [],
+        question: 'Sabendo disso, transforme a AFD ao lado em uma AFND usando os estados abaixo:',
         image: autoimag,
         correctAnswer: 0,
         correctAutomaton: {

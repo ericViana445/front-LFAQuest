@@ -561,10 +561,10 @@ const validateAutomatonEnhanced = (
   return (
     <div className="lesson-container">
       <div className="lesson-left">
-        <div className="lesson-header">
-          <button className="lesson-exit" onClick={onExit}>
+        <button className="lesson-exit" onClick={onExit}>
             <FaXmark size={20} />
           </button>
+        <div className="lesson-header">
           <h1 className="lesson-title">{lessonData.title}</h1>
         </div>
 
@@ -585,7 +585,7 @@ const validateAutomatonEnhanced = (
         </div>
       </div>
 
-      <div className="lesson-right">
+      <div className="lesson-right">        
         {isAutomaton ? (
           <div className="automaton-container">
             <AutomatonLesson
@@ -593,6 +593,7 @@ const validateAutomatonEnhanced = (
               onStateChange={handleAutomatonStateChange}
               onValidation={handleAutomatonValidation}
             />
+            
 
             {isSubmitted && (
               <div className={`feedback ${isCorrect ? "correct-feedback" : "incorrect-feedback"}`}>
