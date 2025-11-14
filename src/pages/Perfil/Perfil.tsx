@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Sidebar from "../../components/sidebar/Sidebar";
 import "./Perfil.css";
+import { FaPuzzlePiece, FaRocket, FaFire, FaGift } from "react-icons/fa";
 
 interface PerfilProps {
   onNavigate?: (section: string) => void;
@@ -48,6 +49,13 @@ const iconMap: Record<string, React.ReactNode> = {
   "🥷": <FaUserSecret color="#8b5cf6"  />,   // Ninja
   "🤖": <FaRobot color="#06b6d4" />,        // Robot
   "💎": <FaCoins color="#facc15" />,        // Moeda
+};
+
+const achievementIconMap: Record<string, JSX.Element> = {
+  puzzle: <FaPuzzlePiece color="#fbbf24" />,
+  rocket: <FaRocket color="#60a5fa" />,
+  fire: <FaFire color="#fb7185" />,
+  gift: <FaGift color="#86efac" />,
 };
 
 const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
@@ -243,37 +251,7 @@ const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
 
   // Conquistas (exemplo)
   {/* Conquistas reais */}
-  <div className="widget badges-section">
-    <h2 className="section-title">Conquistas</h2>
-  
-    {achievements.length === 0 ? (
-      <p style={{ color: "#94a3b8", textAlign: "center" }}>
-        Nenhuma conquista registrada ainda.
-      </p>
-    ) : (
-      <div className="badges-list">
-        {achievements.map((ach) => (
-          <div
-            key={ach.id}
-            className={`badge-item ${ach.unlocked ? "completed" : "locked"}`}
-            title={ach.unlocked ? "Conquista desbloqueada!" : "Ainda bloqueada"}
-          >
-            <div className="badge-icon">
-              {ach.unlocked ? ach.icon : "🔒"}
-            </div>
-            <div className="badge-info">
-              <h3 className="badge-name">{ach.name}</h3>
-              <p className="badge-description">{ach.description}</p>
-            </div>
-            <div className="badge-progress">
-              {ach.unlocked ? "✅" : "—"}
-            </div>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-  
+ 
   
   return (
 
@@ -315,7 +293,10 @@ const Perfil: React.FC<PerfilProps> = ({ onNavigate }) => {
                     className={`badge-item ${ach.unlocked ? "completed" : "locked"}`}
                     title={ach.unlocked ? "Conquista desbloqueada!" : "Ainda bloqueada"}
                   >
-                    <div className="badge-icon">{ach.unlocked ? ach.icon : "🔒"}</div>
+                    <div className="badge-icon">
+                      {ach.unlocked ? achievementIconMap[ach.icon] : "🔒"}
+                    </div>
+                                    
                     <div className="badge-info">
                       <h3 className="badge-name">{ach.name}</h3>
                       <p className="badge-description">{ach.description}</p>
