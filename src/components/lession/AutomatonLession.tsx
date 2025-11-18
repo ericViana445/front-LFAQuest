@@ -1035,24 +1035,6 @@ export function validarEstruturaAutomato(estados: Estado[], conexoes: Conexao[])
   };
 }
 
-// Exemplo de uso:
-/*
-// Para usar em seu componente:
-const analiseNos = getNodesWithStates(estados, conexoes);
-
-console.log("📊 Todos os nós:", analiseNos.todosOsNos);
-console.log("⭐ Nós especiais:", analiseNos.nosComEstadosEspeciais);
-console.log("🚀 Nós iniciais:", analiseNos.nosIniciais);
-console.log("🏁 Nós finais:", analiseNos.nosFinais);
-console.log("📈 Estatísticas:", analiseNos.estatisticas);
-
-// Para validar:
-const validacao = validarEstruturaAutomato(estados, conexoes);
-console.log("✅ Validação:", validacao.valido ? "Válido" : "Inválido");
-console.log("📝 Problemas:", validacao.problemas);
-*/
-
-
 // Funções auxiliares para análise específica
 export function getNosPorTipo(estados: Estado[]) {
   return {

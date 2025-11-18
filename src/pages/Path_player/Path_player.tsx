@@ -458,7 +458,6 @@ const Path_player: React.FC = () => {
         const nextPhase = currentPhase + 1;
         const alreadyUnlocked = userData.unlocked_phases || ["1"];
         console.log("🧩 Fases já desbloqueadas:", alreadyUnlocked, "Tentando liberar:", nextPhase);
-
         if (!alreadyUnlocked.includes(String(nextPhase)) && nextPhase <= 5) {
           const updatedPhases = [...alreadyUnlocked, String(nextPhase)];
           console.log(`🔓 Liberando nova fase: ${nextPhase}`, updatedPhases);
