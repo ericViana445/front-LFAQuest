@@ -8,6 +8,7 @@ import { FaGamepad } from "react-icons/fa";
 import React, { useState, useEffect } from "react"
 import { jwtDecode } from "jwt-decode"
 import { useLocation } from "react-router-dom"
+import autoimag from "../../components/lession/LessonDataImages/automatonlixo.jpeg"
 import Sidebar from "../../components/sidebar/Sidebar.tsx"
 import Task from "../../components/Task/Taks.tsx"
 import Lesson from "../../components/lession/LessonTemplate.tsx"
@@ -509,6 +510,29 @@ const Path_player: React.FC = () => {
   }
 
   const getCurrentLesson = () => {
+    if (currentLessonType === "automaton") {
+      return {
+        isAutomaton: true,
+        title: "Construção de Autômato Finito Determinístico",
+        explanation: `Um AFND (Autômato Finito Não Determinístico) permite múltiplas transições ou transições vazias a partir de um mesmo estado`,
+        alternatives: [],
+        question: 'Sabendo disso, transforme a AFD ao lado em uma AFND usando os estados abaixo:',
+        image: autoimag,
+        correctAnswer: 0,
+        correctAutomaton: {
+          conexoes: [
+            { de: 2, para: 3, caractere: "b" },
+            { de: 2, para: 6, caractere: "a" },
+            { de: 3, para: 5, caractere: "a" },
+            { de: 5, para: 2, caractere: "b" },
+            { de: 5, para: 5, caractere: "a" },
+            { de: 6, para: 7, caractere: "a" },
+            { de: 7, para: 6, caractere: "b" },
+            { de: 7, para: 7, caractere: "a" },
+          ],
+        },
+      }
+    }
 
     if (reviewMode && reviewQuestions.length > 0) {
       const currentLesson = reviewQuestions[currentQuestionIndex]
