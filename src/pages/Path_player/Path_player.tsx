@@ -522,14 +522,11 @@ const Path_player: React.FC = () => {
         correctAnswer: 0,
         correctAutomaton: {
           conexoes: [
-            { de: 2, para: 3, caractere: "b" },
-            { de: 2, para: 6, caractere: "a" },
-            { de: 3, para: 5, caractere: "a" },
-            { de: 5, para: 2, caractere: "b" },
-            { de: 5, para: 5, caractere: "a" },
-            { de: 6, para: 7, caractere: "a" },
-            { de: 7, para: 6, caractere: "b" },
-            { de: 7, para: 7, caractere: "a" },
+            { de: '1', para: '2', caractere: 'b' },
+            { de: '1', para: '3', caractere: 'a' },
+            { de: '2', para: '2', caractere: 'a' },
+            { de: '2', para: '3', caractere: 'a,b' },
+            { de: '3', para: '1', caractere: 'a' }
           ],
         },
       }

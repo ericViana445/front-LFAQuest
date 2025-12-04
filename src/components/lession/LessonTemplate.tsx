@@ -314,7 +314,7 @@ const validateAutomatonEnhanced = (
     const estadosUnicos = todosEstados.filter((estado, index, self) => 
       index === self.findIndex(e => e.id === estado.id)
     );
-
+    
     setUserAutomaton({
       estados: estadosUnicos,
       conexoes: userConnections,
@@ -324,7 +324,7 @@ const validateAutomatonEnhanced = (
     const correct = validateAutomatonEnhanced(estadosUnicos, userConnections);
     setIsCorrect(correct);
     setIsSubmitted(true);
-
+    
     console.log("🎯 Resultado da validação:", correct ? "CORRETO" : "INCORRETO");
     console.groupEnd();
   };
@@ -687,7 +687,7 @@ const validateAutomatonEnhanced = (
 
             <div className="action-buttons">
               {!isSubmitted ? (
-                <button className="submit-button" onClick={handleSubmit} disabled={selectedAnswer === null}>
+                <button className="submit-button" onClick={handleSubmit}>
                   Confirmar Resposta
                 </button>
               ) : (
