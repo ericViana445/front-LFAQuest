@@ -444,11 +444,6 @@ const LessonTemplate: React.FC<LessonTemplateProps> = ({
     setShowTutorial(false)
   }
 
-  const tutorialSteps = [
-    "Tocar em 'Criar uma ligação' para ativar o modo de conexão",
-    "Com essa operação ativada, você clica no estado desejado (estado de origem)",
-    "Após isso, clique em outro estado que deseja conectar (estado de destino)",
-  ]
 
   if (showSummary) {
     const total = answeredQuestions.length || 1
@@ -504,13 +499,10 @@ const LessonTemplate: React.FC<LessonTemplateProps> = ({
     <div className="lesson-container">
       {isAutomaton && (
         <TutorialModal
-          isOpen={showTutorial}
-          onClose={handleCloseTutorial}
-          title="Tutorial: Conectar Estados"
-          steps={tutorialSteps}
-          actionButton="Avançar"
-          onAction={handleCloseTutorial}
-        />
+        isOpen={showTutorial}
+        onClose={handleCloseTutorial}
+        actionButton="Avançar"
+      />
       )}
 
       <div className="lesson-left">
